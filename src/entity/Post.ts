@@ -11,24 +11,38 @@ export class Post {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column()
+	@Column({
+		nullable: false,
+	})
 	title: string;
 
-	@Column()
+	@Column({
+		nullable: false,
+	})
 	contents: string;
 
-	@Column()
+	@Column({
+		nullable: false,
+	})
 	writer: string;
 
-	@Column()
+	@Column({
+		nullable: false,
+	})
 	thumbnail: string;
 
-	@Column()
-	category: number;
+	@Column({
+		nullable: false,
+	})
+	category_idx: number;
 
-	@CreateDateColumn()
+	@CreateDateColumn({
+		nullable: false,
+	})
 	created_at: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({
+		nullable: true,
+	})
 	updated_at: Date;
 }
