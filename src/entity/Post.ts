@@ -11,34 +11,25 @@ export class Post {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column({
-		nullable: false,
-	})
+	@Column()
 	title: string;
 
-	@Column({
-		nullable: false,
-	})
+	@Column()
 	contents: string;
 
-	@Column({
-		nullable: false,
-	})
+	@Column()
 	writer: string;
 
 	@Column({
-		nullable: false,
+		nullable: true,
+		default: 'null',
 	})
 	thumbnail: string;
 
-	@Column({
-		nullable: false,
-	})
+	@Column()
 	category_idx: number;
 
-	@CreateDateColumn({
-		nullable: false,
-	})
+	@CreateDateColumn()
 	created_at: Date;
 
 	@UpdateDateColumn({

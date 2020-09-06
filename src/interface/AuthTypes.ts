@@ -3,8 +3,8 @@ export interface ISignUpTypes {
 	password: string;
 	name: string;
 	email: string;
-	joined_at: Date;
-	profile_image?: string;
+	joinedAt: Date;
+	profileImage?: string;
 }
 
 export interface ISignInTypes {

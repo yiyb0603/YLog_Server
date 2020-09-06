@@ -2,17 +2,15 @@ import { Request, Response } from 'express';
 import { Category } from '../../../../entity/Category';
 import { getRepository, Repository } from 'typeorm';
 import { ICategoryCreate } from 'interface/CategoryTypes';
+import { validateCreateCategory } from '../../../../lib/validation/Category/createCategory';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const categoryRepository: Repository<Category> = getRepository(Category);
 		const { categoryName }: ICategoryCreate = request.body;
 
-		if (!categoryName) {
-			return response.status(400).json({
-				status: 400,
-				message: '검증 오류입니다.',
-			});
+		if (!validateCreateCategory(request, response)) {
+			return;
 		}
 
 		const isExistsCategory: Category = await categoryRepository.findOne({
