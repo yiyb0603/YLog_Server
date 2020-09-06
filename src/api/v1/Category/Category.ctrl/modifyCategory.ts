@@ -2,17 +2,15 @@ import { Request, Response } from 'express';
 import { ICategoryCreate } from 'interface/CategoryTypes';
 import { getRepository, Repository } from 'typeorm';
 import { Category } from '../../../../entity/Category';
+import { validateModifyCategory } from '../../../../lib/validation/Category/modifyCategory';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const modifyData = request.body;
 		const { idx, categoryName }: ICategoryCreate = modifyData;
 
-		if (isNaN(idx) || !categoryName) {
-			return response.status(400).json({
-				status: 400,
-				message: '검증 오류입니다.',
-			});
+		if (!validateModifyCategory(request, response)) {
+			return;
 		}
 
 		const categoryRepository: Repository<Category> = getRepository(Category);

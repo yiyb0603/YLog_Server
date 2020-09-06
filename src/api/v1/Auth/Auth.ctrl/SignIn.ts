@@ -2,11 +2,16 @@ import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { User } from '../../../../entity/User';
 import { ISignInTypes } from 'interface/AuthTypes';
+import { validateSignIn } from '../../../../lib/validation/Auth/SignIn';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const { id, password }: ISignInTypes = request.body;
 		const userRepository: Repository<User> = getRepository(User);
+
+		if (!validateSignIn(request, response)) {
+			return;
+		}
 
 		const userInfo: User = await userRepository.findOne({
 			where: {
@@ -14,13 +19,6 @@ export default async (request: Request, response: Response) => {
 				password: password.toLowerCase(),
 			},
 		});
-
-		if (!id || !password) {
-			return response.status(400).json({
-				status: 400,
-				message: '검증 오류입니다.',
-			});
-		}
 
 		if (!userInfo) {
 			return response.status(401).json({

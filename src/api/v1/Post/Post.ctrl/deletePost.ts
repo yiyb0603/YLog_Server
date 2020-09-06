@@ -6,6 +6,13 @@ export default async (request: Request, response: Response) => {
 	try {
 		const { idx } = request.query;
 
+		if (isNaN(idx)) {
+			return response.status(400).json({
+				status: 400,
+				message: '검증 오류입니다.',
+			});
+		}
+
 		const postRepository: Repository<Post> = getRepository(Post);
 		const findPost: Post = await postRepository.findOne({
 			where: {

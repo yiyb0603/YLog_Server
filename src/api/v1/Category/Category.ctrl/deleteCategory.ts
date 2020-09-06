@@ -5,8 +5,8 @@ import { Category } from '../../../../entity/Category';
 export default async (request: Request, response: Response) => {
 	try {
 		const { idx } = request.query;
-
 		const categoryRepository: Repository<Category> = getRepository(Category);
+
 		if (isNaN(idx)) {
 			return response.status(400).json({
 				status: 400,

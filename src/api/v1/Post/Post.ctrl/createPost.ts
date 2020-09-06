@@ -2,20 +2,18 @@ import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Category } from '../../../../entity/Category';
+import { validateCreatePost } from '../../../../lib/validation/Post/createPost';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const {
-			title,
-			contents,
-			writer,
-			thumbnail,
-			createdAt,
-			categoryIdx,
-		} = request.body;
+		const { title, contents, writer, thumbnail, categoryIdx } = request.body;
 
 		const postRepository: Repository<Post> = getRepository(Post);
 		const categoryRepository: Repository<Category> = getRepository(Category);
+
+		if (!validateCreatePost(request, response)) {
+			return;
+		}
 
 		const existsCategory: Category = await categoryRepository.findOne({
 			where: {
@@ -35,8 +33,8 @@ export default async (request: Request, response: Response) => {
 		post.title = title;
 		post.contents = contents;
 		post.writer = writer;
-		post.thumbnail = thumbnail;
-		post.created_at = createdAt;
+		post.thumbnail = thumbnail || 'null';
+		post.created_at = new Date();
 
 		await postRepository.save(post);
 		return response.status(200).json({

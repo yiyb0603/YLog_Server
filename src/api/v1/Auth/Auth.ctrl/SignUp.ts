@@ -4,11 +4,16 @@ import { getRepository, Repository } from 'typeorm';
 import { ISignUpTypes } from 'interface/AuthTypes';
 import { sha512 } from 'js-sha512';
 import ColorConsole from '../../../../lib/ColorConsole';
+import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const requestData: ISignUpTypes = request.body;
 		const userRepository: Repository<User> = getRepository(User);
+
+		if (!validateSignUp(request, response)) {
+			return;
+		}
 
 		const isExists: User = await userRepository.findOne({
 			where: [
