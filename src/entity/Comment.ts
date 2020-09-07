@@ -22,4 +22,7 @@ export class Comment {
 
 	@UpdateDateColumn()
 	updated_at: Date;
+
+	@Column()
+	post_idx: number;
 }
