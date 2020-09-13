@@ -34,11 +34,12 @@ export default async (request: Request, response: Response) => {
 		comment.writer = writer;
 		comment.contents = contents;
 		comment.created_at = new Date();
+		comment.updated_at = null;
 
 		await commentRepository.save(comment);
 		return response.status(200).json({
 			status: 200,
-			message: '댓글 작성을 성공하였습니다',
+			message: '댓글 작성을 성공하였습니다.',
 		});
 	} catch (error) {
 		console.log(error.message);

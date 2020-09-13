@@ -16,7 +16,7 @@ export const getConnection = async (): Promise<Connection> => {
 	};
 
 	try {
-		const connection = createConnection(connectionOptions);
+		const connection = await createConnection(connectionOptions);
 		console.log('Connection Success with Database');
 		return connection;
 	} catch (error) {

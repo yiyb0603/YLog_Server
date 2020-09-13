@@ -12,14 +12,21 @@ export class Reply {
 	idx: number;
 
 	@Column()
-	contents: string;
+	post_idx: number;
 
 	@Column()
-	writer: string;
+	comment_idx: number;
 
-	@CreateDateColumn()
+	@Column()
+	contents: string;
+
+	@CreateDateColumn({
+		nullable: true,
+	})
 	replied_at: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({
+		nullable: true,
+	})
 	updated_at: Date;
 }
