@@ -1,4 +1,4 @@
-import * as colors from 'colors';
+import colors from 'colors';
 
 const red = (...str: string[]) => {
 	str.forEach((e: string) => {

@@ -27,6 +27,7 @@ export default async (request: Request, response: Response) => {
 		});
 
 		if (isExists) {
+			ColorConsole.red(`[ERROR 409] 중복된 아이디 혹은 이메일입니다.`);
 			return response.status(409).json({
 				status: 409,
 				message: '중복된 아이디 혹은 이메일입니다.',
@@ -42,7 +43,7 @@ export default async (request: Request, response: Response) => {
 			message: '회원가입에 성공하였습니다.',
 		});
 	} catch (error) {
-		ColorConsole.red('[POST] 회원가입 서버 에러 ' + error.message);
+		ColorConsole.red('[ERROR 500] 회원가입 서버 에러 ' + error.message);
 		return response.status(500).json({
 			status: 500,
 			message: '서버 오류입니다.',
