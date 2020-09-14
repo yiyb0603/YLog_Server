@@ -8,6 +8,7 @@
 		"typescript": "3.3.3333"
 	},
 	"dependencies": {
+		"@types/colors": "^1.2.1",
 		"@types/dotenv": "^8.2.0",
 		"@types/joi": "^14.3.4",
 		"@types/jsonwebtoken": "^8.5.0",
