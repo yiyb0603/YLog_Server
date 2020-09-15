@@ -18,6 +18,9 @@ export class Reply {
 	comment_idx: number;
 
 	@Column()
+	writer: string;
+
+	@Column()
 	contents: string;
 
 	@CreateDateColumn({

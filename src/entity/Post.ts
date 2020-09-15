@@ -17,14 +17,15 @@ export class Post {
 	@Column()
 	contents: string;
 
-	@Column()
-	writer: string;
+	@Column({
+		nullable: true,
+	})
+	writer: string | null;
 
 	@Column({
 		nullable: true,
-		default: 'null',
 	})
-	thumbnail: string;
+	thumbnail: string | null;
 
 	@Column()
 	category_idx: number;
