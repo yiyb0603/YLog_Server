@@ -4,6 +4,7 @@ export interface ISignUpTypes {
 	name: string;
 	email: string;
 	joinedAt: Date;
+	adminCode?: string;
 	profileImage?: string | null;
 }
 
