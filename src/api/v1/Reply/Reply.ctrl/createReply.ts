@@ -4,6 +4,7 @@ import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
 import { Reply } from '../../../../entity/Reply';
 import { validateCreateReply } from '../../../../lib/validation/Reply/createReply';
+import ColorConsole from '../../../../lib/ColorConsole';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -31,6 +32,7 @@ export default async (request: Request, response: Response) => {
 		});
 
 		if (!findPost || !findComment) {
+			ColorConsole.red(`[ERROR 404] 해당 게시글 또는 댓글이 없습니다.`);
 			return response.status(404).json({
 				status: 404,
 				message: '해당 게시글 또는 댓글이 없습니다.',
@@ -44,12 +46,13 @@ export default async (request: Request, response: Response) => {
 		reply.comment_idx = commentIdx;
 
 		await replyRepository.save(reply);
+		ColorConsole.green(`[200] 답글 작성을 성공하였습니다.`);
 		return response.status(200).json({
 			status: 200,
 			message: '답글 작성을 성공하였습니다.',
 		});
 	} catch (error) {
-		console.log(error);
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다.`);
 		return response.status(500).json({
 			status: 500,
 			message: '서버 오류입니다.',

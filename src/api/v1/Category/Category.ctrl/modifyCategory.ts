@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { ICategoryCreate } from 'interface/CategoryTypes';
+import ColorConsole from '../../../../lib/ColorConsole';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { getRepository, Repository } from 'typeorm';
 import { Category } from '../../../../entity/Category';
 import { validateModifyCategory } from '../../../../lib/validation/Category/modifyCategory';
@@ -22,24 +24,18 @@ export default async (request: Request, response: Response) => {
 		});
 
 		if (!findCategory) {
-			return response.status(404).json({
-				status: 404,
-				message: '존재하지 않는 카테고리입니다.',
-			});
+			ColorConsole.red(`[ERROR 404] 존재하지 않는 카테고리입니다.`);
+			return handleFailed(response, 404, '존재하지 않는 카테고리입니다.');
 		}
 
 		findCategory.idx = idx;
 		findCategory.category_name = categoryName;
 
 		categoryRepository.save(findCategory);
-		return response.status(200).json({
-			status: 200,
-			message: '카테고리 수정에 성공하였습니다.',
-		});
+		ColorConsole.green(`[200] 카테고리 수정에 성공하였습니다.`);
+		return handleSuccess(response, 200, '카테고리 수정에 성공하였습니다.');
 	} catch (error) {
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
+		return handleFailed(response, 500, '서버 오류입니다.');
 	}
 };

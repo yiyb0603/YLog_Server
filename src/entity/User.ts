@@ -37,4 +37,9 @@ export class User {
 		nullable: true,
 	})
 	profile_image: string;
+
+	@Column({
+		nullable: false,
+	})
+	is_admin: boolean;
 }

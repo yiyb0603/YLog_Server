@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Request, Response } from 'express';
 import { User } from '../../../../entity/User';
 import { getRepository, Repository } from 'typeorm';
@@ -5,48 +6,63 @@ import { ISignUpTypes } from 'interface/AuthTypes';
 import { sha512 } from 'js-sha512';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const requestData: ISignUpTypes = request.body;
+		const {
+			id,
+			password,
+			email,
+			name,
+			joinedAt,
+			adminCode,
+			profileImage,
+		}: ISignUpTypes = request.body;
 		const userRepository: Repository<User> = getRepository(User);
+		const { ADMIN_CODE } = process.env;
 
 		if (!validateSignUp(request, response)) {
 			return;
 		}
 
+		if (adminCode) {
+			if (adminCode !== ADMIN_CODE) {
+				ColorConsole.red(`[ERROR 401] 어드민 코드가 올바르지 않습니다.`);
+				return handleFailed(response, 401, '어드민 코드가 올바르지 않습니다.');
+			}
+		}
+
 		const isExists: User = await userRepository.findOne({
 			where: [
 				{
-					id: requestData.id,
+					id,
 				},
 				{
-					email: requestData.email,
+					email,
 				},
 			],
 		});
 
 		if (isExists) {
 			ColorConsole.red(`[ERROR 409] 중복된 아이디 혹은 이메일입니다.`);
-			return response.status(409).json({
-				status: 409,
-				message: '중복된 아이디 혹은 이메일입니다.',
-			});
+			return handleFailed(response, 409, '중복된 아이디 혹은 이메일입니다.');
 		}
 
-		requestData.password = sha512(requestData.password);
-		await userRepository.save(requestData);
+		const user: User = new User();
+		user.id = id;
+		user.password = sha512(password);
+		user.name = name;
+		user.joined_at = joinedAt;
+		user.email = email;
+		user.profile_image = profileImage || null;
+		user.is_admin = adminCode === ADMIN_CODE || false;
 
+		await userRepository.save(user);
 		ColorConsole.green('[POST] 회원가입 성공');
-		return response.status(200).json({
-			status: 200,
-			message: '회원가입에 성공하였습니다.',
-		});
+		return handleSuccess(response, 200, '회원가입에 성공하였습니다.');
 	} catch (error) {
 		ColorConsole.red('[ERROR 500] 회원가입 서버 에러 ' + error.message);
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		return handleFailed(response, 500, '서버 오류입니다.');
 	}
 };

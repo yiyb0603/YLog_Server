@@ -4,7 +4,8 @@ export interface ISignUpTypes {
 	name: string;
 	email: string;
 	joinedAt: Date;
-	profileImage?: string;
+	adminCode?: string;
+	profileImage?: string | null;
 }
 
 export interface ISignInTypes {
