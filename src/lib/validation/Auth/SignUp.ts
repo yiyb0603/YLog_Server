@@ -4,12 +4,12 @@ import validate from '../validate';
 
 export const validateSignUp = (request: Request, response: Response) => {
 	const scheme: Joi.ObjectSchema = Joi.object().keys({
-		id: Joi.string().max(50).required(),
-		password: Joi.string().max(1000).required(),
-		name: Joi.string().max(50).required(),
+		id: Joi.string().min(5).max(50).required(),
+		password: Joi.string().min(4).max(1000).required(),
+		name: Joi.string().min(1).max(50).required(),
 		joinedAt: Joi.date().required(),
-		email: Joi.string().required(),
-		adminCode: Joi.string(),
+		email: Joi.string().min(10).max(200).required(),
+		adminCode: Joi.string().allow(''),
 		profileImage: Joi.string(),
 	});
 
