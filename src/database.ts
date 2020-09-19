@@ -1,5 +1,6 @@
 import { Connection, createConnection, ConnectionOptions } from 'typeorm';
 import entities from './entity';
+import ColorConsole from './lib/ColorConsole';
 
 export const getConnection = async (): Promise<Connection> => {
 	const connectionOptions: ConnectionOptions = {
@@ -17,9 +18,9 @@ export const getConnection = async (): Promise<Connection> => {
 
 	try {
 		const connection = await createConnection(connectionOptions);
-		console.log('Connection Success with Database');
+		ColorConsole.green('Connection Success with Database');
 		return connection;
 	} catch (error) {
-		console.log('Connection Database Error: ' + error.message);
+		ColorConsole.red('Connection Database Error: ' + error.message);
 	}
 };

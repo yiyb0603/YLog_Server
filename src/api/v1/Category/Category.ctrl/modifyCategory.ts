@@ -8,8 +8,7 @@ import { validateModifyCategory } from '../../../../lib/validation/Category/modi
 
 export default async (request: Request, response: Response) => {
 	try {
-		const modifyData = request.body;
-		const { idx, categoryName }: ICategoryCreate = modifyData;
+		const { idx, categoryName } = request.body;
 
 		if (!validateModifyCategory(request, response)) {
 			return;
@@ -31,7 +30,7 @@ export default async (request: Request, response: Response) => {
 		findCategory.idx = idx;
 		findCategory.category_name = categoryName;
 
-		categoryRepository.save(findCategory);
+		await categoryRepository.save(findCategory);
 		ColorConsole.green(`[200] 카테고리 수정에 성공하였습니다.`);
 		return handleSuccess(response, 200, '카테고리 수정에 성공하였습니다.');
 	} catch (error) {

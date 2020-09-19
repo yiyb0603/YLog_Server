@@ -5,6 +5,7 @@ import { Category } from '../../../../entity/Category';
 import { validateCreatePost } from '../../../../lib/validation/Post/createPost';
 import { decodeToken } from '../../../../lib/token';
 import ColorConsole from '../../../../lib/ColorConsole';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -20,10 +21,7 @@ export default async (request: Request, response: Response) => {
 
 		if (!writerToken) {
 			ColorConsole.red(`[ERROR 401] 토큰이 전송되지 않았습니다.`);
-			return response.status(401).json({
-				status: 401,
-				message: '토큰이 전송되지 않았습니다.',
-			});
+			return handleFailed(response, 401, '토큰이 전송되지 않았습니다.');
 		}
 
 		const existsCategory: Category = await categoryRepository.findOne({
@@ -34,10 +32,7 @@ export default async (request: Request, response: Response) => {
 
 		if (!existsCategory) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 카테고리입니다.`);
-			return response.status(404).json({
-				status: 404,
-				message: '존재하지 않는 카테고리입니다.',
-			});
+			return handleFailed(response, 404, '존재하지 않는 카테고리입니다.');
 		}
 
 		const post: Post = new Post();
@@ -50,15 +45,9 @@ export default async (request: Request, response: Response) => {
 
 		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 생성에 성공하였습니다.`);
-		return response.status(200).json({
-			status: 200,
-			message: '글 생성에 성공하였습니다',
-		});
+		return handleSuccess(response, 200, '글 생성에 성공하였습니다.');
 	} catch (error) {
 		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		return handleFailed(response, 500, '서버 오류입니다.');
 	}
 };
