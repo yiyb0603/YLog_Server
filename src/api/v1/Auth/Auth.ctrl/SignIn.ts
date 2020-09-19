@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
-import { sha512 } from 'js-sha512';
 import { User } from '../../../../entity/User';
 import { ISignInTypes } from 'interface/AuthTypes';
 import { validateSignIn } from '../../../../lib/validation/Auth/SignIn';

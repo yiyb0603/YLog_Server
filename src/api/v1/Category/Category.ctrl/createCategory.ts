@@ -22,6 +22,7 @@ export default async (request: Request, response: Response) => {
 		});
 
 		if (isExistsCategory) {
+			ColorConsole.red(`[ERROR 409] 이미 존재하는 카테고리 입니다.`);
 			return handleFailed(response, 409, '이미 존재하는 카테고리 입니다.');
 		}
 
@@ -29,6 +30,7 @@ export default async (request: Request, response: Response) => {
 		category.category_name = categoryName;
 
 		await categoryRepository.save(category);
+		ColorConsole.green(`[200] 카테고리 생성에 성공하였습니다.`);
 		return handleSuccess(response, 200, '카테고리 생성에 성공하였습니다.');
 	} catch (error) {
 		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
