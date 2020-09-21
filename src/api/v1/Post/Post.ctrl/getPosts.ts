@@ -10,11 +10,12 @@ export default async (request: Request, response: Response) => {
 			select: [
 				'idx',
 				'category_idx',
-				'contents',
+				'introduction',
 				'created_at',
 				'thumbnail',
 				'title',
 				'writer',
+				'writer_id',
 			],
 		});
 

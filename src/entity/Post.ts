@@ -15,12 +15,18 @@ export class Post {
 	title: string;
 
 	@Column()
+	introduction: string;
+
+	@Column()
 	contents: string;
 
 	@Column({
 		nullable: true,
 	})
 	writer: string | null;
+
+	@Column()
+	writer_id: string;
 
 	@Column({
 		nullable: true,
@@ -35,6 +41,7 @@ export class Post {
 
 	@UpdateDateColumn({
 		nullable: true,
+		default: null,
 	})
 	updated_at: Date;
 }
