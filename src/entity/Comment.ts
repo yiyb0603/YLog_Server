@@ -11,7 +11,10 @@ export class Comment {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column()
+	@Column({
+		nullable: true,
+		default: null,
+	})
 	writer: string;
 
 	@Column()
