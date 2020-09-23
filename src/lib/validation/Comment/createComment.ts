@@ -5,7 +5,6 @@ import validate from '../validate';
 export const validateCreateComment = (request: Request, response: Response) => {
 	const scheme = Joi.object().keys({
 		postIdx: Joi.number().integer().required(),
-		writer: Joi.string().required(),
 		contents: Joi.string().required(),
 	});
 

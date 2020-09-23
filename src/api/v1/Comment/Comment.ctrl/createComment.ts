@@ -4,11 +4,13 @@ import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
 import { validateCreateComment } from '../../../../lib/validation/Comment/createComment';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { postIdx, writer, contents } = request.body;
+		const { postIdx, contents } = request.body;
 
+		const user: User = request.user;
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 
@@ -31,7 +33,7 @@ export default async (request: Request, response: Response) => {
 
 		const comment: Comment = new Comment();
 		comment.post_idx = postIdx;
-		comment.writer = writer;
+		comment.writer = user ? user.name : null;
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;

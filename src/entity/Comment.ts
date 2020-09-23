@@ -11,7 +11,10 @@ export class Comment {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column()
+	@Column({
+		nullable: true,
+		default: null,
+	})
 	writer: string;
 
 	@Column()
@@ -20,7 +23,10 @@ export class Comment {
 	@CreateDateColumn()
 	created_at: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({
+		nullable: true,
+		default: null,
+	})
 	updated_at: Date;
 
 	@Column()

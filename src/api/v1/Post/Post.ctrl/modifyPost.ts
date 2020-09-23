@@ -15,6 +15,7 @@ export default async (request: Request, response: Response) => {
 			thumbnail,
 			updatedAt,
 			categoryIdx,
+			introduction,
 		} = request.body;
 
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -47,6 +48,7 @@ export default async (request: Request, response: Response) => {
 		const post: Post = new Post();
 		post.idx = idx;
 		post.title = title || post.title;
+		post.introduction = introduction || post.introduction;
 		post.contents = contents || post.contents;
 		post.writer = writer || post.writer;
 		post.thumbnail = thumbnail || post.thumbnail || 'null';

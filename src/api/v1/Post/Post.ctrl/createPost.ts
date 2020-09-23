@@ -9,7 +9,13 @@ import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { title, contents, thumbnail, categoryIdx } = request.body;
+		const {
+			title,
+			contents,
+			thumbnail,
+			categoryIdx,
+			introduction,
+		} = request.body;
 
 		const postRepository: Repository<Post> = getRepository(Post);
 		const categoryRepository: Repository<Category> = getRepository(Category);
@@ -38,7 +44,9 @@ export default async (request: Request, response: Response) => {
 		const post: Post = new Post();
 		post.category_idx = existsCategory.idx;
 		post.title = title;
+		post.introduction = introduction;
 		post.writer = writerToken.name;
+		post.writer_id = writerToken.id;
 		post.contents = contents;
 		post.thumbnail = thumbnail || null;
 		post.created_at = new Date();

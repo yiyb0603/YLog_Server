@@ -4,11 +4,11 @@ import { SignOptions } from 'jsonwebtoken';
 
 const { JWT_SECRET } = process.env;
 
-export const createToken = (id: string, name: string, isAdmin: boolean) => {
+export const createToken = (id: string, name: string, is_admin: boolean) => {
 	const payload = {
 		id,
 		name,
-		isAdmin,
+		is_admin,
 	};
 
 	const options: SignOptions = {
@@ -20,4 +20,8 @@ export const createToken = (id: string, name: string, isAdmin: boolean) => {
 
 export const decodeToken = (token: string) => {
 	return jwt.decode(token);
+};
+
+export const verifyToken = (token: string) => {
+	return jwt.verify(token, JWT_SECRET);
 };

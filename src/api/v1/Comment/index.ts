@@ -3,10 +3,11 @@ import createComment from './Comment.ctrl/createComment';
 import deleteComment from './Comment.ctrl/deleteComment';
 import modifyComment from './Comment.ctrl/modifyComment';
 import getComments from './Comment.ctrl/getComments';
+import authMiddleWare from '../../../lib/middleware/Auth';
 
 const router = Router();
 
-router.post('/', createComment);
+router.post('/', authMiddleWare.validateGuest, createComment);
 router.delete('/', deleteComment);
 router.put('/', modifyComment);
 router.get('/', getComments);
