@@ -3,6 +3,7 @@ import ColorConsole from '../../../../lib/ColorConsole';
 import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { Comment } from '../../../../entity/Comment';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -14,11 +15,21 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const postRepository: Repository<Post> = getRepository(Post);
+		const commentRepository: Repository<Comment> = getRepository(Comment);
+
 		const findPost: Post = await postRepository.findOne({
 			where: {
 				idx,
 			},
 		});
+
+		const findComments: Comment[] = await commentRepository.find({
+			where: {
+				post_idx: idx,
+			},
+		});
+
+		await commentRepository.remove(findComments);
 
 		if (!findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);

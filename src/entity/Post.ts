@@ -36,6 +36,11 @@ export class Post {
 	@Column()
 	category_idx: number;
 
+	@Column({
+		default: 0,
+	})
+	comment_length: number;
+
 	@CreateDateColumn()
 	created_at: Date;
 

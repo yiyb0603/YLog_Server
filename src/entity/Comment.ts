@@ -20,7 +20,10 @@ export class Comment {
 	@CreateDateColumn()
 	created_at: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({
+		nullable: true,
+		default: null,
+	})
 	updated_at: Date;
 
 	@Column()
