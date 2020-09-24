@@ -81,7 +81,7 @@ const validateGuest = async (
 };
 
 const validateAuth = async (request: Request, response: Response) => {
-	const requestToken: string = request.headers['y-log-token'];
+	const requestToken: string = request.headers['ylog-token'];
 
 	try {
 		const decodeToken: any = await verifyToken(requestToken);
