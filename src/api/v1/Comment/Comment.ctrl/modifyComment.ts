@@ -1,8 +1,11 @@
+import { User } from '../../../../entity/User';
 import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
 import { Post } from '../../../../entity/Post';
 import { validateModifyComment } from '../../../../lib/validation/Comment/modifyComment';
+import ColorConsole from '../../../../lib/ColorConsole';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -10,6 +13,7 @@ export default async (request: Request, response: Response) => {
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const postRepository: Repository<Post> = getRepository(Post);
+		const user: User = request.user;
 
 		if (!validateModifyComment(request, response)) {
 			return;
@@ -27,11 +31,16 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
+		if (findComment.writer !== user.name || !user.is_admin) {
+			ColorConsole.red(`[ERROR 403] 댓글을 수정할 권한이 없습니다.`);
+			handleFailed(response, 403, '댓글을 수정할 권한이 없습니다.');
+			return;
+		}
+
 		if (!findComment || !findPost) {
-			return response.status(404).json({
-				status: 404,
-				message: '존재하지 않는 글 혹은 댓글입니다.',
-			});
+			ColorConsole.red(`[ERROR 404] 존재하지 않는 글 혹은 댓글입니다.`);
+			handleFailed(response, 404, '존재하지 않는 글 혹은 댓글입니다.');
+			return;
 		}
 
 		const comment: Comment = new Comment();
@@ -41,14 +50,12 @@ export default async (request: Request, response: Response) => {
 		comment.updated_at = new Date();
 
 		await commentRepository.save(comment);
-		return response.status(200).json({
-			status: 200,
-			message: '댓글 수정을 성공하였습니다.',
-		});
+		ColorConsole.green(`[200] 댓글 수정을 성공하였습니다.`);
+		handleSuccess(response, 200, '댓글 수정을 성공하였습니다.');
+		return;
 	} catch (error) {
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
+		handleFailed(response, 500, '서버 오류입니다.');
+		return;
 	}
 };
