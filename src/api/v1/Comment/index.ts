@@ -8,8 +8,8 @@ import authMiddleWare from '../../../lib/middleware/Auth';
 const router = Router();
 
 router.post('/', authMiddleWare.validateGuest, createComment);
-router.delete('/', deleteComment);
-router.put('/', modifyComment);
+router.delete('/', authMiddleWare.validateUser, deleteComment);
+router.put('/', authMiddleWare.validateUser, modifyComment);
 router.get('/', getComments);
 
 export default router;

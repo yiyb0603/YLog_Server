@@ -39,7 +39,7 @@ const validateUser = async (
 			case 'INVALID_TOKEN':
 			case 'NO_USER':
 				ColorConsole.red(`[ERROR 401] 인증되지 않은 토큰입니다.`);
-				handleFailed(response, 401, '인증되지 않은 토큰입니다.');
+				handleFailed(response, 401, '토큰이 올바르지 않습니다.');
 				return;
 			case 'EXPIRED_TOKEN':
 				ColorConsole.red(`[ERROR 410] 토큰이 만료되었습니다.`);
