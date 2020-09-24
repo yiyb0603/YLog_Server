@@ -5,11 +5,11 @@ import ColorConsole from '../../../../lib/ColorConsole';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { postIdx } = request.query;
+		const postIdx: number = Number(request.query.postIdx);
 		const replyRepository: Repository<Reply> = getRepository(Reply);
 
-		if (isNaN(postIdx)) {
-			ColorConsole.red(`[ERROR 400] 검ㄷ증 오류입니다.`);
+		if (!Number.isInteger(postIdx)) {
+			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
 			return response.stauts(400).json({
 				status: 400,
 				message: '검증 오류입니다.',

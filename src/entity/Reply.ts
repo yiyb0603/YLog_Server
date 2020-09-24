@@ -17,7 +17,10 @@ export class Reply {
 	@Column()
 	comment_idx: number;
 
-	@Column()
+	@Column({
+		nullable: true,
+		default: null,
+	})
 	writer: string;
 
 	@Column()
@@ -30,6 +33,7 @@ export class Reply {
 
 	@UpdateDateColumn({
 		nullable: true,
+		default: null,
 	})
 	updated_at: Date;
 }
