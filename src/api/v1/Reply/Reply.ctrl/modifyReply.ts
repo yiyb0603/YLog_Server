@@ -8,7 +8,7 @@ import ColorConsole from '../../../../lib/ColorConsole';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx, commentIdx, postIdx, contents, updatedAt } = request.body;
+		const { idx, commentIdx, postIdx, contents } = request.body;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -49,7 +49,7 @@ export default async (request: Request, response: Response) => {
 		reply.comment_idx = commentIdx;
 		reply.contents = contents;
 		reply.post_idx = postIdx;
-		reply.updated_at = updatedAt;
+		reply.updated_at = new Date();
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 수정에 성공하였습니다.`);

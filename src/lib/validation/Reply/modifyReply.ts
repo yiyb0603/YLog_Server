@@ -8,7 +8,6 @@ export const validateModifyReply = (request: Request, response: Response) => {
 		commentIdx: Joi.number().integer().required(),
 		postIdx: Joi.number().integer().required(),
 		contents: Joi.string().required(),
-		updatedAt: Joi.date().required(),
 	});
 
 	return validate(request, response, scheme);
