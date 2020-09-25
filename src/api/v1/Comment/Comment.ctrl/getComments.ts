@@ -2,18 +2,19 @@ import { Request, Response } from 'express';
 import { Repository, getRepository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
+import ColorConsole from '../../../../lib/ColorConsole';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { postIdx } = request.query;
+		const postIdx: number = Number(request.query.postIdx);
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 
 		if (isNaN(postIdx)) {
-			return response.status(400).json({
-				status: 400,
-				message: '검증 오류입니다.',
-			});
+			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
+			handleFailed(response, 400, '검증 오류입니다.');
+			return;
 		}
 
 		const findPost: Post = await postRepository.findOne({
@@ -23,10 +24,9 @@ export default async (request: Request, response: Response) => {
 		});
 
 		if (!findPost) {
-			return response.status(404).json({
-				status: 404,
-				message: '존재하지 않는 글입니다.',
-			});
+			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);
+			handleFailed(response, 404, '존재하지 않는 글입니다.');
+			return;
 		}
 
 		const comments: Comment[] = await commentRepository.find({
@@ -38,19 +38,20 @@ export default async (request: Request, response: Response) => {
 				'writer',
 				'updated_at',
 			],
-		});
 
-		return response.status(200).json({
-			status: 200,
-			message: '댓글 목록 조회에 성공하였습니다.',
-			data: {
-				comments,
+			where: {
+				post_idx: postIdx,
 			},
 		});
-	} catch (error) {
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
+
+		ColorConsole.green(`[200] 댓글 목록 조회에 성공하였습니다.`);
+		handleSuccess(response, 200, '댓글 목록 조회에 성공하였습니다.', {
+			comments,
 		});
+		return;
+	} catch (error) {
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
+		handleFailed(response, 500, '서버 오류입니다.');
+		return;
 	}
 };

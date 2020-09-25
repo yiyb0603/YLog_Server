@@ -9,7 +9,7 @@ import ColorConsole from '../../../../lib/ColorConsole';
 export default async (request: Request, response: Response) => {
 	try {
 		const requestData = request.body;
-		const { postIdx, commentIdx, contents, repliedAt } = requestData;
+		const { postIdx, commentIdx, contents } = requestData;
 
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
@@ -42,7 +42,7 @@ export default async (request: Request, response: Response) => {
 		const reply: Reply = new Reply();
 		reply.post_idx = postIdx;
 		reply.contents = contents;
-		reply.replied_at = repliedAt;
+		reply.replied_at = new Date();
 		reply.comment_idx = commentIdx;
 
 		await replyRepository.save(reply);
@@ -52,7 +52,7 @@ export default async (request: Request, response: Response) => {
 			message: '답글 작성을 성공하였습니다.',
 		});
 	} catch (error) {
-		ColorConsole.red(`[ERROR 500] 서버 오류입니다.`);
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
 		return response.status(500).json({
 			status: 500,
 			message: '서버 오류입니다.',
