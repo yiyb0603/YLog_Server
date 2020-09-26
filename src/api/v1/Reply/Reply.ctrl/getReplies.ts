@@ -28,6 +28,7 @@ export default async (request: Request, response: Response) => {
 				'replied_at',
 				'updated_at',
 				'comment_idx',
+				'writer',
 			],
 		});
 

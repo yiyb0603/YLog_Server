@@ -4,7 +4,6 @@ import { verifyToken } from '../token';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../ColorConsole';
 import { handleFailed } from '../Response';
-import { nextTick } from 'process';
 
 const validateAdmin = async (
 	request: Request,
@@ -38,7 +37,7 @@ const validateUser = async (
 			case 'NO_TOKEN':
 			case 'INVALID_TOKEN':
 			case 'NO_USER':
-				ColorConsole.red(`[ERROR 401] 인증되지 않은 토큰입니다.`);
+				ColorConsole.red(`[ERROR 401] 토큰이 올바르지 않습니다.`);
 				handleFailed(response, 401, '토큰이 올바르지 않습니다.');
 				return;
 			case 'EXPIRED_TOKEN':
@@ -46,7 +45,7 @@ const validateUser = async (
 				handleFailed(response, 410, '토큰이 만료되었습니다.');
 				return;
 			default:
-				ColorConsole.red(`[ERROR 500] 서버 오류입니다,`);
+				ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
 				handleFailed(response, 500, '서버 오류입니다.');
 				return;
 		}
