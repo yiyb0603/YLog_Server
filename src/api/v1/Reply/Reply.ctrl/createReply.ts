@@ -5,10 +5,12 @@ import { Comment } from '../../../../entity/Comment';
 import { Reply } from '../../../../entity/Reply';
 import { validateCreateReply } from '../../../../lib/validation/Reply/createReply';
 import ColorConsole from '../../../../lib/ColorConsole';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const requestData = request.body;
+		const user: User = request.user;
 		const { postIdx, commentIdx, contents } = requestData;
 
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -44,6 +46,7 @@ export default async (request: Request, response: Response) => {
 		reply.contents = contents;
 		reply.replied_at = new Date();
 		reply.comment_idx = commentIdx;
+		reply.writer = user ? user.name : null;
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 작성을 성공하였습니다.`);

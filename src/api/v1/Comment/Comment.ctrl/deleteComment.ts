@@ -3,14 +3,16 @@ import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Repository, getRepository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
-import { User } from 'entity/User';
+import { User } from '../../../../entity/User';
+import { Reply } from '../../../../entity/Reply';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx } = request.query;
+		const idx: number = Number(request.query.idx);
 		const user: User = request.user;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
+		const replyRepository: Repository<Reply> = getRepository(Reply);
 
 		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
@@ -24,7 +26,13 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (findComment.writer !== user.name || !user.is_admin) {
+		const findReplies: Reply[] = await replyRepository.find({
+			where: {
+				comment_idx: idx,
+			},
+		});
+
+		if (findComment.writer !== user.name) {
 			ColorConsole.red(`[ERROR 403] 댓글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 삭제할 권한이 없습니다.');
 			return;
@@ -36,6 +44,7 @@ export default async (request: Request, response: Response) => {
 		}
 
 		await commentRepository.remove(findComment);
+		await replyRepository.remove(findReplies);
 		ColorConsole.green(`[200] 댓글 삭제를 성공하였습니다.`);
 		handleSuccess(response, 200, '댓글 삭제를 성공하였습니다.');
 		return;

@@ -4,7 +4,7 @@ import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
 import { validateCreateComment } from '../../../../lib/validation/Comment/createComment';
-import { User } from '../../../../entity/User';
+import { User } from 'entity/User';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
