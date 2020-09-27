@@ -6,6 +6,7 @@ import { Reply } from '../../../../entity/Reply';
 import { validateCreateReply } from '../../../../lib/validation/Reply/createReply';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { User } from 'entity/User';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -35,10 +36,8 @@ export default async (request: Request, response: Response) => {
 
 		if (!findPost || !findComment) {
 			ColorConsole.red(`[ERROR 404] 해당 게시글 또는 댓글이 없습니다.`);
-			return response.status(404).json({
-				status: 404,
-				message: '해당 게시글 또는 댓글이 없습니다.',
-			});
+			handleFailed(response, 404, '해당 게시글 또는 댓글이 없습니다.');
+			return;
 		}
 
 		const reply: Reply = new Reply();
@@ -50,15 +49,11 @@ export default async (request: Request, response: Response) => {
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 작성을 성공하였습니다.`);
-		return response.status(200).json({
-			status: 200,
-			message: '답글 작성을 성공하였습니다.',
-		});
+		handleSuccess(response, 200, '답글 작성을 성공하였습니다.');
+		return;
 	} catch (error) {
 		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		handleFailed(response, 500, '서버 오류입니다.');
+		return;
 	}
 };
