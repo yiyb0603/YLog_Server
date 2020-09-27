@@ -32,7 +32,8 @@ export default async (request: Request, response: Response) => {
 
 		if (!findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);
-			return handleFailed(response, 404, '존재하지 않는 글입니다.');
+			handleFailed(response, 404, '존재하지 않는 글입니다.');
+			return;
 		}
 
 		if (findPost.writer_id !== user.id && (!user || !user.is_admin)) {

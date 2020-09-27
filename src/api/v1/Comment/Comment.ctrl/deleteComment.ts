@@ -41,6 +41,7 @@ export default async (request: Request, response: Response) => {
 		if (!findComment) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 댓글입니다.`);
 			handleFailed(response, 404, '존재하지 않는 댓글입니다.');
+			return;
 		}
 
 		await commentRepository.remove(findComment);
