@@ -6,7 +6,7 @@ export const validateCreateReply = (request: Request, response: Response) => {
 	const scheme: Joi.ObjectSchema = Joi.object().keys({
 		commentIdx: Joi.number().integer().required(),
 		postIdx: Joi.number().integer().required(),
-		contents: Joi.string().required(),
+		contents: Joi.string().min(1).max(255).required(),
 	});
 
 	return validate(request, response, scheme);

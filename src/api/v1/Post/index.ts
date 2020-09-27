@@ -4,10 +4,11 @@ import deletePost from './Post.ctrl/deletePost';
 import getPost from './Post.ctrl/getPost';
 import getPosts from './Post.ctrl/getPosts';
 import modifyPost from './Post.ctrl/modifyPost';
+import authMiddleware from '../../../lib/middleware/Auth';
 
 const router = Router();
 
-router.post('/', CreatePost);
+router.post('/', authMiddleware.validateAdmin, CreatePost);
 router.delete('/', deletePost);
 router.put('/', modifyPost);
 router.get('/', getPosts);

@@ -8,7 +8,7 @@ export const validateModifyCategory = (
 ) => {
 	const scheme: Joi.ObjectSchema = Joi.object().keys({
 		idx: Joi.number().integer().required(),
-		categoryName: Joi.string().max(50).required(),
+		categoryName: Joi.string().min(1).max(100).required(),
 	});
 
 	return validate(request, response, scheme);
