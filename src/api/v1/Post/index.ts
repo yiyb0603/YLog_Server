@@ -9,8 +9,8 @@ import authMiddleware from '../../../lib/middleware/Auth';
 const router = Router();
 
 router.post('/', authMiddleware.validateAdmin, CreatePost);
-router.delete('/', deletePost);
-router.put('/', modifyPost);
+router.delete('/', authMiddleware.validateAdmin, deletePost);
+router.put('/', authMiddleware.validateAdmin, modifyPost);
 router.get('/', getPosts);
 router.get('/:idx', getPost);
 

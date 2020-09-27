@@ -1,18 +1,19 @@
 import { Connection, createConnection, ConnectionOptions } from 'typeorm';
 import entities from './entity';
 import ColorConsole from './lib/ColorConsole';
+import 'dotenv/config';
 
 export const getConnection = async (): Promise<Connection> => {
 	const connectionOptions: ConnectionOptions = {
 		type: 'mysql',
-		database: 'ylog_db',
+		database: process.env.DATABASE,
 		synchronize: false,
 		logging: false,
 		entities,
-		host: 'localhost',
+		host: process.env.DB_HOST,
 		port: 3306,
-		username: 'root',
-		password: '',
+		username: process.env.DB_USERNAME,
+		password: process.env.DB_PASSWORD,
 		charset: 'utf8mb4_unicode_ci',
 	};
 

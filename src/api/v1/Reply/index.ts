@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/', getReplies);
 router.post('/', authMiddleware.validateGuest, createReply);
-router.put('/', modifyReply);
-router.delete('/', deleteReply);
+router.put('/', authMiddleware.validateUser, modifyReply);
+router.delete('/', authMiddleware.validateUser, deleteReply);
 
 export default router;
