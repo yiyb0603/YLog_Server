@@ -3,10 +3,12 @@ import { Reply } from '../../../../entity/Reply';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const idx: number = Number(request.query.idx);
+		const user: User = request.user;
 		const replyRepository: Repository<Reply> = getRepository(Reply);
 
 		if (!Number.isInteger(idx)) {
@@ -24,6 +26,12 @@ export default async (request: Request, response: Response) => {
 		if (!findReply) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 답글입니다.`);
 			handleFailed(response, 404, '존재하지 않는 답글입니다.');
+			return;
+		}
+
+		if (user.id !== findReply.writer_id && (!user || !user.is_admin)) {
+			ColorConsole.red(`[ERROR 403] 답글을 삭제할 권한이 없습니다.`);
+			handleFailed(response, 403, '답글을 삭제할 권한이 없습니다.');
 			return;
 		}
 

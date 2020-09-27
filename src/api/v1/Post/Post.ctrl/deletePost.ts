@@ -4,18 +4,19 @@ import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Comment } from '../../../../entity/Comment';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx } = request.query;
+		const idx: number = Number(request.query.idx);
+		const user: User = request.user;
+		const postRepository: Repository<Post> = getRepository(Post);
+		const commentRepository: Repository<Comment> = getRepository(Comment);
 
-		if (isNaN(idx)) {
+		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
 			return handleFailed(response, 400, '검증 오류입니다.');
 		}
-
-		const postRepository: Repository<Post> = getRepository(Post);
-		const commentRepository: Repository<Comment> = getRepository(Comment);
 
 		const findPost: Post = await postRepository.findOne({
 			where: {
@@ -29,13 +30,18 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		await commentRepository.remove(findComments);
-
 		if (!findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);
 			return handleFailed(response, 404, '존재하지 않는 글입니다.');
 		}
 
+		if (findPost.writer_id !== user.id && (!user || !user.is_admin)) {
+			ColorConsole.red(`[ERROR 403] 글을 삭제할 권한이 없습니다.`);
+			handleFailed(response, 403, '글을 삭제할 권한이 없습니다.');
+			return;
+		}
+
+		await commentRepository.remove(findComments);
 		await postRepository.remove(findPost);
 		ColorConsole.green(`[200] 글 삭제를 성공하였습니다.`);
 		return handleSuccess(response, 200, '글 삭제를 성공하였습니다.');

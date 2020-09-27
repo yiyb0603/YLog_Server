@@ -23,6 +23,12 @@ export class Reply {
 	})
 	writer: string;
 
+	@Column({
+		nullable: true,
+		default: null,
+	})
+	writer_id: string;
+
 	@Column()
 	contents: string;
 

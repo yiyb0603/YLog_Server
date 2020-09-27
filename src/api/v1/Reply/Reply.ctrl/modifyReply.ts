@@ -6,10 +6,12 @@ import { validateModifyReply } from '../../../../lib/validation/Reply/modifyRepl
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const { idx, commentIdx, postIdx, contents } = request.body;
+		const user: User = request.user;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -40,6 +42,12 @@ export default async (request: Request, response: Response) => {
 		if (!findReply || !findComment || !findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 분류의 답글 입니다.`);
 			handleFailed(response, 404, '존재하지 않는 분류의 답글 입니다.');
+			return;
+		}
+
+		if (user.id !== findReply.writer_id) {
+			ColorConsole.red(`[ERROR 403] 답글을 수정할 권한이 없습니다.`);
+			handleFailed(response, 403, '답글을 수정할 권한이 없습니다.');
 			return;
 		}
 
