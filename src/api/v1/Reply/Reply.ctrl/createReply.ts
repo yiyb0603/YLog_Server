@@ -7,6 +7,7 @@ import { validateCreateReply } from '../../../../lib/validation/Reply/createRepl
 import ColorConsole from '../../../../lib/ColorConsole';
 import { User } from 'entity/User';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { memoryUsage } from 'process';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -46,6 +47,7 @@ export default async (request: Request, response: Response) => {
 		reply.replied_at = new Date();
 		reply.comment_idx = commentIdx;
 		reply.writer = user ? user.name : null;
+		reply.writer_id = user ? user.id : null;
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 작성을 성공하였습니다.`);
