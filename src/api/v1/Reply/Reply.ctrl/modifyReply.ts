@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { validateModifyReply } from '../../../../lib/validation/Reply/modifyReply';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
+import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -38,10 +39,8 @@ export default async (request: Request, response: Response) => {
 
 		if (!findReply || !findComment || !findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 분류의 답글 입니다.`);
-			return response.status(404).json({
-				status: 404,
-				message: '존재하지 않는 분류의 답글 입니다.',
-			});
+			handleFailed(response, 404, '존재하지 않는 분류의 답글 입니다.');
+			return;
 		}
 
 		const reply: Reply = new Reply();
@@ -52,16 +51,11 @@ export default async (request: Request, response: Response) => {
 		reply.updated_at = new Date();
 
 		await replyRepository.save(reply);
-		ColorConsole.green(`[200] 답글 수정에 성공하였습니다.`);
-		return response.status(200).json({
-			status: 200,
-			message: '답글 수정에 성공하였습니다.',
-		});
+		ColorConsole.green(`[200] 답글 수정을 성공하였습니다.`);
+		handleSuccess(response, 200, '답글 수정을 성공하였습니다.');
 	} catch (error) {
-		ColorConsole.red(`[ERROR 500] 서버 오류입니다.`);
-		return response.status(500).json({
-			status: 500,
-			message: '서버 오류입니다.',
-		});
+		ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
+		handleFailed(response, 500, '서버 오류입니다.');
+		return;
 	}
 };
