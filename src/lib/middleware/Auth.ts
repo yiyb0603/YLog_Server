@@ -10,16 +10,37 @@ const validateAdmin = async (
 	response: Response,
 	next: NextFunction
 ) => {
-	const user: User = await validateAuth(request, response);
+	try {
+		const user: User = await validateAuth(request, response);
 
-	if (user.is_admin === undefined || !user.is_admin) {
-		ColorConsole.red(`[ERROR 403] 권한이 없습니다.`);
-		handleFailed(response, 403, '권한이 없습니다.');
-		return;
+		if (user.is_admin === undefined || !user.is_admin) {
+			ColorConsole.red(`[ERROR 403] 권한이 없습니다.`);
+			handleFailed(response, 403, '권한이 없습니다.');
+			return;
+		}
+
+		request.user = user;
+		next();
+	} catch (error) {
+		switch (error.message) {
+			case 'jwt must be provided':
+			case 'TOKEN_IS_ARRAY':
+			case 'NO_TOKEN':
+			case 'INVALID_TOKEN':
+			case 'NO_USER':
+				ColorConsole.red(`[ERROR 401] 올바르지 않은 토큰입니다.`);
+				handleFailed(response, 401, '올바르지 않은 토큰입니다.');
+				return;
+			case 'EXPIRED_TOKEN':
+				ColorConsole.red(`[ERROR 410] 토큰이 만료되었습니다.`);
+				handleFailed(response, 410, '토큰이 만료되었습니다.');
+				return;
+			default:
+				ColorConsole.red(`[ERROR 500] 서버 오류입니다. ${error.message}`);
+				handleFailed(response, 500, '서버 오류입니다.');
+				return;
+		}
 	}
-
-	request.user = user;
-	next();
 };
 
 const validateUser = async (

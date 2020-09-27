@@ -7,7 +7,7 @@ export const validateModifyReply = (request: Request, response: Response) => {
 		idx: Joi.number().integer().required(),
 		commentIdx: Joi.number().integer().required(),
 		postIdx: Joi.number().integer().required(),
-		contents: Joi.string().required(),
+		contents: Joi.string().min(1).max(255).required(),
 	});
 
 	return validate(request, response, scheme);

@@ -6,6 +6,7 @@ import { validateCreatePost } from '../../../../lib/validation/Post/createPost';
 import { decodeToken } from '../../../../lib/token';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -16,18 +17,13 @@ export default async (request: Request, response: Response) => {
 			categoryIdx,
 			introduction,
 		} = request.body;
+		const user: User = request.user;
 
 		const postRepository: Repository<Post> = getRepository(Post);
 		const categoryRepository: Repository<Category> = getRepository(Category);
-		const writerToken: any = decodeToken(request.headers['y-log-token']);
 
 		if (!validateCreatePost(request, response)) {
 			return;
-		}
-
-		if (!writerToken) {
-			ColorConsole.red(`[ERROR 401] 토큰이 전송되지 않았습니다.`);
-			return handleFailed(response, 401, '토큰이 전송되지 않았습니다.');
 		}
 
 		const existsCategory: Category = await categoryRepository.findOne({
@@ -45,8 +41,8 @@ export default async (request: Request, response: Response) => {
 		post.category_idx = existsCategory.idx;
 		post.title = title;
 		post.introduction = introduction;
-		post.writer = writerToken.name;
-		post.writer_id = writerToken.id;
+		post.writer = user ? user.name : '관리자';
+		post.writer_id = user ? user.id : '관리자';
 		post.contents = contents;
 		post.thumbnail = thumbnail || null;
 		post.created_at = new Date();
