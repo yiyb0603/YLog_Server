@@ -47,16 +47,16 @@ export default async (request: Request, response: Response) => {
 			});
 		}
 
-		const post: Post = new Post();
-		post.title = title || post.title;
-		post.introduction = introduction || post.introduction;
-		post.contents = contents || post.contents;
-		post.writer = user ? user.name : '관리자';
-		post.thumbnail = thumbnail || post.thumbnail || 'null';
-		post.category_idx = categoryIdx || post.category_idx;
-		post.updated_at = new Date();
+		findPost.title = title || findPost.title;
+		findPost.introduction = introduction || findPost.introduction;
+		findPost.contents = contents || findPost.contents;
+		findPost.writer = user ? user.name : '관리자';
+		findPost.thumbnail = thumbnail || findPost.thumbnail || 'null';
+		findPost.writer_id = user ? user.id : null;
+		findPost.category_idx = categoryIdx || findPost.category_idx;
+		findPost.updated_at = new Date();
 
-		await postRepository.save(post);
+		await postRepository.save(findPost);
 		ColorConsole.green(`[200] 글 수정에 성공하였습니다.`);
 		return response.status(200).json({
 			status: 200,

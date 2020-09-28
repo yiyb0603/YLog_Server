@@ -46,6 +46,7 @@ export default async (request: Request, response: Response) => {
 		post.contents = contents;
 		post.thumbnail = thumbnail || null;
 		post.created_at = new Date();
+		post.updated_at = null;
 
 		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 생성에 성공하였습니다.`);
