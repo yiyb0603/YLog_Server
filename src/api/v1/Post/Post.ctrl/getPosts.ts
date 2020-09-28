@@ -21,6 +21,7 @@ export default async (request: Request, response: Response) => {
 				'title',
 				'writer',
 				'writer_id',
+				'updated_at',
 			],
 		});
 

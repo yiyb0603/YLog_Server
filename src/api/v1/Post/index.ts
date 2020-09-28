@@ -9,9 +9,10 @@ import searchPosts from './Post.ctrl/searchPosts';
 
 const router = Router();
 
+router.put('/', authMiddleware.validateAdmin, modifyPost);
 router.post('/', authMiddleware.validateAdmin, CreatePost);
 router.delete('/', authMiddleware.validateAdmin, deletePost);
-router.put('/', authMiddleware.validateAdmin, modifyPost);
+
 router.get('/search', searchPosts);
 router.get('/', getPosts);
 router.get('/:idx', getPost);
