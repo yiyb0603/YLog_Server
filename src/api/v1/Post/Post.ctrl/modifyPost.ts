@@ -4,6 +4,7 @@ import { Post } from '../../../../entity/Post';
 import { Category } from '../../../../entity/Category';
 import { validateModifyPost } from '../../../../lib/validation/Post/modifyPost';
 import ColorConsole from '../../../../lib/ColorConsole';
+import { User } from '../../../../entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -17,6 +18,7 @@ export default async (request: Request, response: Response) => {
 			categoryIdx,
 			introduction,
 		} = request.body;
+		const user: User = request.user;
 
 		const postRepository: Repository<Post> = getRepository(Post);
 		const categoryRepository: Repository<Category> = getRepository(Category);
@@ -46,14 +48,13 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const post: Post = new Post();
-		post.idx = idx;
 		post.title = title || post.title;
 		post.introduction = introduction || post.introduction;
 		post.contents = contents || post.contents;
-		post.writer = writer || post.writer;
+		post.writer = user ? user.name : '관리자';
 		post.thumbnail = thumbnail || post.thumbnail || 'null';
 		post.category_idx = categoryIdx || post.category_idx;
-		post.updated_at = updatedAt;
+		post.updated_at = new Date();
 
 		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 수정에 성공하였습니다.`);
