@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('Notice')
 export class Notice {
@@ -19,4 +25,13 @@ export class Notice {
 		nullable: false,
 	})
 	writer: string;
+
+	@CreateDateColumn()
+	created_at: Date;
+
+	@UpdateDateColumn({
+		nullable: true,
+		default: null,
+	})
+	updated_at: Date;
 }
