@@ -21,6 +21,7 @@ export default async (request: Request, response: Response) => {
 		notice.title = title;
 		notice.contents = contents;
 		notice.writer = user ? user.name : '관리자';
+		notice.created_at = new Date();
 
 		await noticeRepository.save(notice);
 		ColorConsole.green(`[200] 공지사항 등록을 성공하였습니다.`);
