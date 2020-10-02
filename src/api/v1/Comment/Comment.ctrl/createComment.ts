@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import validate from '../../../../lib/validation/validate';
+import * as admin from 'firebase-admin';
 import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
 import { validateCreateComment } from '../../../../lib/validation/Comment/createComment';
-import { User } from 'entity/User';
+import { User } from '../../../../entity/User';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
@@ -13,6 +13,7 @@ export default async (request: Request, response: Response) => {
 		const { postIdx, contents } = request.body;
 
 		const user: User = request.user;
+		const userRepository: Repository<User> = getRepository(User);
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 
@@ -32,12 +33,39 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
+		const postWriter: User = await userRepository.findOne({
+			where: {
+				id: findPost.writer_id,
+			},
+		});
+
 		const comment: Comment = new Comment();
 		comment.post_idx = postIdx;
 		comment.writer = user ? user.name : null;
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;
+
+		console.log(postWriter.fcm_token);
+
+		if (postWriter.fcm_allow) {
+			const message = {
+				webpush: {
+					notification: {
+						icon: null,
+						title: `${user.name}님께서 댓글을 남겼습니다.`,
+						click_action: `http://www.naver.com`,
+					},
+				},
+				data: {
+					score: '850',
+					time: '2:45',
+				},
+				token: postWriter.fcm_token,
+			};
+
+			admin.messaging().send(message);
+		}
 
 		await commentRepository.save(comment);
 		ColorConsole.green(`[200] 댓글 작성을 성공하였습니다.`);

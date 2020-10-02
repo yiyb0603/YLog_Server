@@ -42,4 +42,16 @@ export class User {
 		nullable: false,
 	})
 	is_admin: boolean;
+
+	@Column({
+		nullable: true,
+		default: null,
+	})
+	fcm_token: string;
+
+	@Column({
+		nullable: true,
+		default: false,
+	})
+	fcm_allow: boolean;
 }

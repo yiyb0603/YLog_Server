@@ -16,9 +16,10 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const posts: Post[] = await postRepository.find({
-			where: {
-				title: Like(`%${keyword}%`),
-			},
+			where: [
+				{ title: Like(`%${keyword}%`) },
+				{ introduction: Like(`%${keyword}%`) },
+			],
 		});
 
 		ColorConsole.green(`[200] 블로그 글 검색을 성공하였습니다.`);

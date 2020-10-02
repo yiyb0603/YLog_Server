@@ -5,13 +5,16 @@ import { Post } from '../../../../entity/Post';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Comment } from '../../../../entity/Comment';
 import { User } from 'entity/User';
+import { Reply } from '../../../../entity/Reply';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const idx: number = Number(request.query.idx);
 		const user: User = request.user;
+
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
+		const replyRepository: Repository<Reply> = getRepository(Reply);
 
 		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
@@ -25,6 +28,12 @@ export default async (request: Request, response: Response) => {
 		});
 
 		const findComments: Comment[] = await commentRepository.find({
+			where: {
+				post_idx: idx,
+			},
+		});
+
+		const findReplies: Reply[] = await replyRepository.find({
 			where: {
 				post_idx: idx,
 			},
@@ -44,6 +53,7 @@ export default async (request: Request, response: Response) => {
 
 		await commentRepository.remove(findComments);
 		await postRepository.remove(findPost);
+		await replyRepository.remove(findReplies);
 		ColorConsole.green(`[200] 글 삭제를 성공하였습니다.`);
 		return handleSuccess(response, 200, '글 삭제를 성공하였습니다.');
 	} catch (error) {
