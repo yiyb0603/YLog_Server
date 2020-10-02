@@ -46,22 +46,13 @@ export default async (request: Request, response: Response) => {
 		comment.created_at = new Date();
 		comment.updated_at = null;
 
-		console.log(postWriter.fcm_token);
-
 		if (postWriter.fcm_allow) {
 			const message = {
-				webpush: {
-					notification: {
-						icon: null,
-						title: `${user.name}님께서 댓글을 남겼습니다.`,
-						click_action: `http://www.naver.com`,
-					},
-				},
-				data: {
-					score: '850',
-					time: '2:45',
-				},
 				token: postWriter.fcm_token,
+				notification: {
+					title: 'Portugal vs. Denmark',
+					body: 'great match!',
+				},
 			};
 
 			admin.messaging().send(message);
