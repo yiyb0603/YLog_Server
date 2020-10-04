@@ -48,7 +48,7 @@ export default async (request: Request, response: Response) => {
 		comment.created_at = new Date();
 		comment.updated_at = null;
 
-		if (postWriter.fcm_allow) {
+		if (postWriter.id !== user.id && postWriter.fcm_allow) {
 			const { fcm_token } = postWriter;
 
 			SendFCM(
