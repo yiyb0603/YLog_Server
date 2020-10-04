@@ -56,7 +56,11 @@ export default async (request: Request, response: Response) => {
 		reply.writer = user ? user.name : null;
 		reply.writer_id = user ? user.id : null;
 
-		if (commentWriter && commentWriter.fcm_allow) {
+		if (
+			commentWriter &&
+			commentWriter.id !== user.id &&
+			commentWriter.fcm_allow
+		) {
 			const { fcm_token } = commentWriter;
 
 			SendFCM(
