@@ -32,7 +32,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (findComment.writer !== user.name) {
+		if (findComment.writer !== user.name && (!user || !user.is_admin)) {
 			ColorConsole.red(`[ERROR 403] 댓글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 삭제할 권한이 없습니다.');
 			return;
