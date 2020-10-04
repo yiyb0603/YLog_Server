@@ -1,34 +1,26 @@
-import axios from 'axios';
+import * as admin from 'firebase-admin';
 
 export default async (
 	token: string,
 	title: string,
 	body: string,
-	link: string
+	icon: string = 'http://localhost:3000/assets/icon/Logo.PNG',
+	link: string = 'http://localhost:3000'
 ) => {
 	try {
-		const URL: string = `https://fcm.googleapis.com/fcm/send`;
-		const request = {
-			to: token,
-			data: {
-				title,
-				body,
-				click_action: link,
-			},
-
-			notification: {
-				title,
-				body,
-				click_action: link,
+		const message = {
+			token,
+			webpush: {
+				notification: {
+					title,
+					body,
+					icon,
+					click_action: link,
+				},
 			},
 		};
 
-		await axios.post(URL, request, {
-			headers: {
-				Authorization:
-					'key=AAAAMtTOkBs:APA91bE-_DEPjADf9FkHVikxcsWqQboDGaPRAKcKRSSDqz_uaiGFsVkmv-tcdiKjxjHvt3G2W5jZ9Y-apSHc-cs87jswhqgepjoJcLmfYMILQz0BDtZqCimmj4b7TSYAGBHCPDJUJ3Ek',
-			},
-		});
+		admin.messaging().send(message);
 	} catch (error) {
 		console.log(error);
 	}

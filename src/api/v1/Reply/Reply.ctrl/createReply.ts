@@ -5,9 +5,9 @@ import { Comment } from '../../../../entity/Comment';
 import { Reply } from '../../../../entity/Reply';
 import { validateCreateReply } from '../../../../lib/validation/Reply/createReply';
 import ColorConsole from '../../../../lib/ColorConsole';
-import { User } from 'entity/User';
+import { User } from '../../../../entity/User';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { memoryUsage } from 'process';
+import SendFCM from '../../../../lib/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -15,6 +15,7 @@ export default async (request: Request, response: Response) => {
 		const user: User = request.user;
 		const { postIdx, commentIdx, contents } = requestData;
 
+		const userRepository: Repository<User> = getRepository(User);
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const replyRepository: Repository<Reply> = getRepository(Reply);
@@ -35,6 +36,12 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
+		const commentWriter: User = await userRepository.findOne({
+			where: {
+				id: findComment.writer_id,
+			},
+		});
+
 		if (!findPost || !findComment) {
 			ColorConsole.red(`[ERROR 404] 해당 게시글 또는 댓글이 없습니다.`);
 			handleFailed(response, 404, '해당 게시글 또는 댓글이 없습니다.');
@@ -48,6 +55,20 @@ export default async (request: Request, response: Response) => {
 		reply.comment_idx = commentIdx;
 		reply.writer = user ? user.name : null;
 		reply.writer_id = user ? user.id : null;
+
+		if (commentWriter && commentWriter.fcm_allow) {
+			const { fcm_token } = commentWriter;
+
+			SendFCM(
+				fcm_token,
+				user
+					? `${user.name}님이 답글을 남기셨습니다.`
+					: '게스트님이 답글을 남기셨습니다.',
+				contents.length > 16
+					? contents.substring(0, 16).concat('...')
+					: contents
+			);
+		}
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 작성을 성공하였습니다.`);
