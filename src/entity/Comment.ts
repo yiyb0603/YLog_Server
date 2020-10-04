@@ -17,6 +17,12 @@ export class Comment {
 	})
 	writer: string;
 
+	@Column({
+		nullable: true,
+		default: null,
+	})
+	writer_id: string;
+
 	@Column()
 	contents: string;
 

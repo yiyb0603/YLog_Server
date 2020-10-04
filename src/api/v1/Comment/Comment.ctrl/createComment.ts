@@ -7,6 +7,7 @@ import { validateCreateComment } from '../../../../lib/validation/Comment/create
 import { User } from '../../../../entity/User';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import SendFCM from '../../../../lib/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -41,21 +42,24 @@ export default async (request: Request, response: Response) => {
 
 		const comment: Comment = new Comment();
 		comment.post_idx = postIdx;
+		comment.writer_id = user ? user.id : null;
 		comment.writer = user ? user.name : null;
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;
 
 		if (postWriter.fcm_allow) {
-			const message = {
-				token: postWriter.fcm_token,
-				notification: {
-					title: 'Portugal vs. Denmark',
-					body: 'great match!',
-				},
-			};
+			const { fcm_token } = postWriter;
 
-			admin.messaging().send(message);
+			SendFCM(
+				fcm_token,
+				user
+					? `${user.name}님이 댓글을 작성하였습니다.`
+					: '게스트님이 댓글을 작성하였습니다.',
+				contents.length > 16
+					? contents.substring(0, 16).concat('...')
+					: contents
+			);
 		}
 
 		await commentRepository.save(comment);
