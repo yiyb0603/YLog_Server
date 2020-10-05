@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import auth from './Auth';
+import Auth from './Auth';
+import Member from './Member';
 import Category from './Category';
 import Post from './Post';
 import Comment from './Comment';
@@ -9,7 +10,8 @@ import Notice from './Notice';
 
 const router = Router();
 
-router.use('/auth', auth);
+router.use('/auth', Auth);
+router.use('/member', Member);
 router.use('/category', Category);
 router.use('/post', Post);
 router.use('/comment', Comment);

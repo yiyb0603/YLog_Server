@@ -54,4 +54,10 @@ export class User {
 		default: false,
 	})
 	fcm_allow: boolean;
+
+	@Column({
+		nullable: true,
+		default: null,
+	})
+	is_allow: boolean;
 }
