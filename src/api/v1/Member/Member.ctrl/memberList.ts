@@ -1,6 +1,6 @@
 import { User } from '../../../../entity/User';
 import { Request, Response } from 'express';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, IsNull, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
@@ -9,15 +9,9 @@ export default async (request: Request, response: Response) => {
 		const { isAllow } = request.query;
 		const userRepository: Repository<User> = getRepository(User);
 
-		if (!isAllow) {
-			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
-			handleFailed(response, 400, '검증 오류입니다.');
-			return;
-		}
-
 		const members: User[] = await userRepository.find({
 			where: {
-				is_allow: isAllow,
+				is_allow: isAllow === 'null' ? IsNull() : Boolean(isAllow),
 			},
 		});
 
