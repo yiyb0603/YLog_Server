@@ -4,7 +4,6 @@ import { User } from '../../../../entity/User';
 import { getRepository, Repository } from 'typeorm';
 import { ISignUpTypes } from 'interface/AuthTypes';
 import ColorConsole from '../../../../lib/ColorConsole';
-import { sha512 } from 'js-sha512';
 import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
@@ -15,7 +14,6 @@ export default async (request: Request, response: Response) => {
 			password,
 			email,
 			name,
-			joinedAt,
 			adminCode,
 			profileImage,
 		}: ISignUpTypes = request.body;
@@ -53,9 +51,9 @@ export default async (request: Request, response: Response) => {
 
 		const user: User = new User();
 		user.id = id;
-		user.password = sha512(password).toLowerCase();
+		user.password = password;
 		user.name = name;
-		user.joined_at = joinedAt;
+		user.joined_at = null;
 		user.email = email;
 		user.profile_image = profileImage || null;
 		user.is_admin = adminCode === ADMIN_CODE || false;

@@ -28,7 +28,8 @@ export class User {
 
 	@Column('timestamptz')
 	@CreateDateColumn({
-		nullable: false,
+		nullable: true,
+		default: null,
 	})
 	joined_at: Date;
 
