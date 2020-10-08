@@ -25,11 +25,14 @@ export default async (request: Request, response: Response) => {
 
 		if (!userInfo) {
 			ColorConsole.red(`[ERROR 401] 아이디 또는 비밀번호가 올바르지 않습니다.`);
-			return handleFailed(
-				response,
-				401,
-				'아이디 또는 비밀번호가 올바르지 않습니다.'
-			);
+			handleFailed(response, 401, '아이디 또는 비밀번호가 올바르지 않습니다.');
+			return;
+		}
+
+		if (!userInfo.is_allow) {
+			ColorConsole.red(`[ERROR 401] 현재 승인되지 않은 유저입니다.`);
+			handleFailed(response, 401, '현재 승인되지 않은 유저입니다.');
+			return;
 		}
 
 		const ylogToken: string = await createToken(
