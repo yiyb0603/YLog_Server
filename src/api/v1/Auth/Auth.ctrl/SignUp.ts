@@ -6,6 +6,7 @@ import { ISignUpTypes } from 'interface/AuthTypes';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
+import { EmailCode } from '../../../../entity/EmailCode';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -17,7 +18,9 @@ export default async (request: Request, response: Response) => {
 			adminCode,
 			profileImage,
 		}: ISignUpTypes = request.body;
+
 		const userRepository: Repository<User> = getRepository(User);
+		const emailRepository: Repository<EmailCode> = getRepository(EmailCode);
 		const { ADMIN_CODE } = process.env;
 
 		if (!validateSignUp(request, response)) {
@@ -32,20 +35,27 @@ export default async (request: Request, response: Response) => {
 			}
 		}
 
-		const isExists: User = await userRepository.findOne({
+		const isExistUser: User = await userRepository.findOne({
 			where: [
 				{
 					id,
 				},
-				{
-					email,
-				},
 			],
 		});
 
-		if (isExists) {
-			ColorConsole.red(`[ERROR 409] 중복된 아이디 혹은 이메일입니다.`);
-			handleFailed(response, 409, '중복된 아이디 혹은 이메일입니다.');
+		if (isExistUser) {
+			ColorConsole.red(`[ERROR 409] 중복된 아이디입니다.`);
+			handleFailed(response, 409, '중복된 아이디입니다.');
+			return;
+		}
+
+		const certifiedEmail: EmailCode = await emailRepository.findOne({
+			where: { email },
+		});
+
+		if (!certifiedEmail || !certifiedEmail.is_certified) {
+			ColorConsole.red(`[ERROR 401] 인증되지 않은 이메일 입니다.`);
+			handleFailed(response, 401, '인증되지 않은 이메일 입니다.');
 			return;
 		}
 
@@ -58,6 +68,7 @@ export default async (request: Request, response: Response) => {
 		user.profile_image = profileImage || null;
 		user.is_admin = adminCode === ADMIN_CODE || false;
 
+		await emailRepository.remove(certifiedEmail);
 		await userRepository.save(user);
 		ColorConsole.green('[200] 회원가입 성공');
 		return handleSuccess(response, 200, '회원가입에 성공하였습니다.');

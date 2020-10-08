@@ -14,6 +14,7 @@ export default async (request: Request, response: Response) => {
 		const { postIdx, contents } = request.body;
 
 		const user: User = request.user;
+
 		const userRepository: Repository<User> = getRepository(User);
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
@@ -48,7 +49,7 @@ export default async (request: Request, response: Response) => {
 		comment.created_at = new Date();
 		comment.updated_at = null;
 
-		if (postWriter.id !== user.id && postWriter.fcm_allow) {
+		if ((!user || postWriter.id !== user.id) && postWriter.fcm_allow) {
 			const { fcm_token } = postWriter;
 
 			SendFCM(

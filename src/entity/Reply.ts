@@ -6,7 +6,7 @@ import {
 	Entity,
 } from 'typeorm';
 
-@Entity('Reply')
+@Entity('reply')
 export class Reply {
 	@PrimaryGeneratedColumn()
 	idx: number;

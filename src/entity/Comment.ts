@@ -6,7 +6,7 @@ import {
 	Entity,
 } from 'typeorm';
 
-@Entity('Comment')
+@Entity('comment')
 export class Comment {
 	@PrimaryGeneratedColumn()
 	idx: number;
