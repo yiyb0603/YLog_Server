@@ -3,14 +3,26 @@ import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { getRepository, Repository } from 'typeorm';
 import { Category } from '../../../../entity/Category';
+import { Post } from '../../../../entity/Post';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const categoryRepository: Repository<Category> = getRepository(Category);
+		const postRepository: Repository<Post> = getRepository(Post);
 
 		const categories: Category[] = await categoryRepository.find({
 			select: ['idx', 'category_name'],
 		});
+
+		for (let i = 0; i < categories.length; i++) {
+			const count: number = await postRepository.count({
+				where: {
+					category_idx: categories[i].idx,
+				},
+			});
+
+			categories[i].post_count = count;
+		}
 
 		ColorConsole.green(`[200] 카테고리 목록 조회에 성공하였습니다.`);
 		return handleSuccess(
