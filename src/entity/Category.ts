@@ -5,6 +5,13 @@ export class Category {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column()
+	@Column({
+		nullable: false,
+	})
 	category_name: string;
+
+	@Column({
+		nullable: false,
+	})
+	post_count: number;
 }
