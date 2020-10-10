@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import createURL from '../../../../lib/createURL';
+import createURL from '../../../../lib/util/createURL';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 

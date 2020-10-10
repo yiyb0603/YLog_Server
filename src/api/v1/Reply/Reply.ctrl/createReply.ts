@@ -7,7 +7,7 @@ import { validateCreateReply } from '../../../../lib/validation/Reply/createRepl
 import ColorConsole from '../../../../lib/ColorConsole';
 import { User } from '../../../../entity/User';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import SendFCM from '../../../../lib/SendFCM';
+import SendFCM from '../../../../lib/util/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {

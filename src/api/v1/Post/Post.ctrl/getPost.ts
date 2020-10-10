@@ -18,7 +18,7 @@ export default async (request: Request, response: Response) => {
 			return handleFailed(response, 400, '검증 오류입니다.');
 		}
 
-		const post = await postRepository.findOne({
+		const post: Post = await postRepository.findOne({
 			where: {
 				idx,
 			},

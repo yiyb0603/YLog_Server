@@ -7,7 +7,7 @@ import { validateCreateComment } from '../../../../lib/validation/Comment/create
 import { User } from '../../../../entity/User';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import SendFCM from '../../../../lib/SendFCM';
+import SendFCM from '../../../../lib/util/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {
