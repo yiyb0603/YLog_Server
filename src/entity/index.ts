@@ -5,6 +5,7 @@ import { Comment } from './Comment';
 import { Category } from './Category';
 import { Notice } from './Notice';
 import { EmailCode } from './EmailCode';
+import { Release } from './Release';
 
 const entities: (
 	| typeof User
@@ -14,6 +15,7 @@ const entities: (
 	| typeof Post
 	| typeof Notice
 	| typeof EmailCode
-)[] = [User, Post, Reply, Comment, Category, Notice, EmailCode];
+	| typeof Release
+)[] = [User, Post, Reply, Comment, Category, Notice, EmailCode, Release];
 
 export default entities;

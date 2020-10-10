@@ -1,6 +1,7 @@
-import { Release } from 'entity/Release';
-import { User } from 'entity/User';
+import { Release } from '../../../../entity/Release';
+import { User } from '../../../../entity/User';
 import { Request, Response } from 'express';
+import { validateCreateRelease } from '../../../../lib/validation/Release/createRelease';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
@@ -12,6 +13,10 @@ export default async (request: Request, response: Response) => {
     const user: User = request.user;
 
     const releaseRepository: Repository<Release> = getRepository(Release);
+
+    if (!validateCreateRelease(request, response)) {
+      return;
+    }
 
     const release: Release = new Release();
     release.title = title;

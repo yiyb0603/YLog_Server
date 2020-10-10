@@ -7,6 +7,7 @@ import Comment from './Comment';
 import Reply from './Reply';
 import Upload from './Upload';
 import Notice from './Notice';
+import Release from './Release';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/comment', Comment);
 router.use('/reply', Reply);
 router.use('/upload', Upload);
 router.use('/notice', Notice);
+router.use('/release', Release)
 
 export default router;

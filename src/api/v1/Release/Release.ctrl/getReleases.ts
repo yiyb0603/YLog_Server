@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { getRepository, Repository } from 'typeorm';
-import { Release } from 'entity/Release';
+import { Release } from '../../../../entity/Release';
 
 export default async (request: Request, response: Response) => {
 	try {

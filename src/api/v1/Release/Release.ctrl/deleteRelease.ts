@@ -1,4 +1,4 @@
-import { Release } from 'entity/Release';
+import { Release } from '../../../../entity/Release';
 import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';

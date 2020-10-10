@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { Release } from 'entity/Release';
+import { Release } from '../../../../entity/Release';
 
 export default async (request: Request, response: Response) => {
 	try {

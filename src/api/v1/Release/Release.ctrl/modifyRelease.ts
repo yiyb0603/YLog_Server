@@ -1,6 +1,7 @@
-import { Release } from 'entity/Release';
+import { Release } from '../../../../entity/Release';
 import { User } from 'entity/User';
 import { Request, Response } from 'express';
+import { validateModifyRelease } from '../../../../lib/validation/Release/modifyRelease';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
@@ -12,6 +13,10 @@ export default async (request: Request, response: Response) => {
     const user: User = request.user;
 
     const releaseRepository: Repository<Release> = getRepository(Release);
+
+    if (!validateModifyRelease(request, response)) {
+      return;
+    }
 
     const release: Release = await releaseRepository.findOne({
       where: {
