@@ -1,24 +1,26 @@
 import { Request, Response } from 'express';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Like, Repository } from 'typeorm';
 import { Category } from '../../../../entity/Category';
 import { Post } from '../../../../entity/Post';
 
 export default async (request: Request, response: Response) => {
 	try {
+		const { keyword } = request.query;
 		const categoryRepository: Repository<Category> = getRepository(Category);
 		const postRepository: Repository<Post> = getRepository(Post);
 
 		const categories: Category[] = await categoryRepository.find({
-			select: ['idx', 'category_name'],
+			select: ['idx', 'category_name']
 		});
 
 		for (let i = 0; i < categories.length; i++) {
 			const count: number = await postRepository.count({
-				where: {
+				where: { 
 					category_idx: categories[i].idx,
-				},
+					title: Like(`%${keyword ? keyword : ''}%`),
+				}
 			});
 
 			categories[i].post_count = count;

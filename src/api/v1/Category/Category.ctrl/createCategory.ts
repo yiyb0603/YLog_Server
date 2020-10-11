@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Category } from '../../../../entity/Category';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Like, Repository } from 'typeorm';
 import { ICategoryCreate } from 'interface/CategoryTypes';
 import { validateCreateCategory } from '../../../../lib/validation/Category/createCategory';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
@@ -17,7 +17,7 @@ export default async (request: Request, response: Response) => {
 
 		const isExistsCategory: Category = await categoryRepository.findOne({
 			where: {
-				category_name: categoryName,
+				category_name: categoryName
 			},
 		});
 
