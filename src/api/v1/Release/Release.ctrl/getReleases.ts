@@ -11,7 +11,6 @@ export default async (request: Request, response: Response) => {
 			select: [
         'idx',
         'title',
-        'contents',
         'created_at',
         'updated_at',
         'writer'

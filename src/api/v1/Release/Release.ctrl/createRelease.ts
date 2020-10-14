@@ -13,6 +13,7 @@ export default async (request: Request, response: Response) => {
     const user: User = request.user;
 
     const releaseRepository: Repository<Release> = getRepository(Release);
+    console.log(request.body);
 
     if (!validateCreateRelease(request, response)) {
       return;
