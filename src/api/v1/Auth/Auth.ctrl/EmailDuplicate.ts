@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { User } from 'entity/User';
+import { User } from '../../../../entity/User';
 import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
