@@ -36,19 +36,19 @@ export default async (request: Request, response: Response) => {
 
 		const postWriter: User = await userRepository.findOne({
 			where: {
-				id: findPost.writer_id,
+				idx: findPost.writer_idx,
 			},
 		});
 
 		const comment: Comment = new Comment();
 		comment.post_idx = postIdx;
-		comment.writer_id = user ? user.id : null;
+		comment.writer_idx = user ? user.idx : null;
 		comment.writer = user ? user.name : null;
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;
 
-		if ((!user || postWriter.id !== user.id) && postWriter.fcm_allow) {
+		if ((!user || postWriter.idx !== user.idx) && postWriter.fcm_allow) {
 			const { fcm_token } = postWriter;
 
 			SendFCM(

@@ -8,12 +8,10 @@ import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { EmailCode } from '../../../../entity/EmailCode';
 import SendFCM from '../../../../lib/util/SendFCM';
-import firebase from 'firebase';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const {
-			id,
 			password,
 			email,
 			name,
@@ -37,20 +35,6 @@ export default async (request: Request, response: Response) => {
 			}
 		}
 
-		const isExistUser: User = await userRepository.findOne({
-			where: [
-				{
-					id,
-				},
-			],
-		});
-
-		if (isExistUser) {
-			ColorConsole.red(`[ERROR 409] 중복된 아이디입니다.`);
-			handleFailed(response, 409, '중복된 아이디입니다.');
-			return;
-		}
-
 		const certifiedEmail: EmailCode = await emailRepository.findOne({
 			where: { email },
 		});
@@ -62,7 +46,6 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const user: User = new User();
-		user.id = id;
 		user.password = password;
 		user.name = name;
 		user.joined_at = null;

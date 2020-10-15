@@ -20,7 +20,7 @@ export default async (request: Request, response: Response) => {
 				'thumbnail',
 				'title',
 				'writer',
-				'writer_id',
+				'writer_idx',
 				'updated_at',
 			],
 		});

@@ -7,7 +7,7 @@ import { getRepository, Repository } from 'typeorm';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { memberId } = request.body;
+		const { memberIdx } = request.body;
 
 		const userRepository: Repository<User> = getRepository(User);
 
@@ -17,7 +17,7 @@ export default async (request: Request, response: Response) => {
 
 		const member: User = await userRepository.findOne({
 			where: {
-				id: memberId,
+				id: memberIdx,
 			},
 		});
 

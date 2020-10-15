@@ -109,7 +109,7 @@ const validateAuth = async (request: Request, response: Response) => {
 		const userRepository: Repository<User> = getRepository(User);
 		const user: User = await userRepository.findOne({
 			where: {
-				id: decodeToken.id,
+				idx: decodeToken.idx,
 			},
 		});
 

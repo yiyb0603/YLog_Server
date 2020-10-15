@@ -11,13 +11,19 @@ export class Post {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column()
+	@Column({
+		nullable: false
+	})
 	title: string;
 
-	@Column()
+	@Column({
+		nullable: false
+	})
 	introduction: string;
 
-	@Column()
+	@Column({
+		nullable: false
+	})
 	contents: string;
 
 	@Column({
@@ -25,15 +31,19 @@ export class Post {
 	})
 	writer: string | null;
 
-	@Column()
-	writer_id: string;
+	@Column({
+		nullable: false
+	})
+	writer_idx: number;
 
 	@Column({
 		nullable: true,
 	})
 	thumbnail: string | null;
 
-	@Column()
+	@Column({
+		nullable: false
+	})
 	category_idx: number;
 
 	@Column({
