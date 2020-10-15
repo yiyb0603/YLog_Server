@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import * as admin from 'firebase-admin';
 import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
