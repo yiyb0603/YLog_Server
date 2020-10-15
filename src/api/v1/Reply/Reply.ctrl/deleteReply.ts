@@ -29,7 +29,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (user.id !== findReply.writer_id && (!user || !user.is_admin)) {
+		if (user.idx !== findReply.writer_idx && (!user || !user.is_admin)) {
 			ColorConsole.red(`[ERROR 403] 답글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '답글을 삭제할 권한이 없습니다.');
 			return;

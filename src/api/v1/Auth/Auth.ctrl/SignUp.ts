@@ -7,11 +7,11 @@ import ColorConsole from '../../../../lib/ColorConsole';
 import { validateSignUp } from '../../../../lib/validation/Auth/SignUp';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { EmailCode } from '../../../../entity/EmailCode';
+import SendFCM from '../../../../lib/util/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const {
-			id,
 			password,
 			email,
 			name,
@@ -27,26 +27,12 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (adminCode.length > 0) {
+		if (adminCode) {
 			if (adminCode !== ADMIN_CODE) {
 				ColorConsole.red(`[ERROR 401] 어드민 코드가 올바르지 않습니다.`);
 				handleFailed(response, 401, '어드민 코드가 올바르지 않습니다.');
 				return;
 			}
-		}
-
-		const isExistUser: User = await userRepository.findOne({
-			where: [
-				{
-					id,
-				},
-			],
-		});
-
-		if (isExistUser) {
-			ColorConsole.red(`[ERROR 409] 중복된 아이디입니다.`);
-			handleFailed(response, 409, '중복된 아이디입니다.');
-			return;
 		}
 
 		const certifiedEmail: EmailCode = await emailRepository.findOne({
@@ -60,13 +46,29 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const user: User = new User();
-		user.id = id;
 		user.password = password;
 		user.name = name;
 		user.joined_at = null;
 		user.email = email;
 		user.profile_image = profileImage || null;
 		user.is_admin = adminCode === ADMIN_CODE || false;
+
+		const admins: User[] = await userRepository.find({
+			where: {
+				is_admin: true,
+				fcm_allow: true,
+			}
+		});
+
+		for (let i = 0; i < admins.length; i++) {
+			if (admins[i].fcm_allow) {
+				const { fcm_token } = admins[i];
+	
+				SendFCM(
+					fcm_token,`${user.name}님이 가입신청을 하였습니다.`
+				);
+			}
+		}
 
 		await emailRepository.remove(certifiedEmail);
 		await userRepository.save(user);

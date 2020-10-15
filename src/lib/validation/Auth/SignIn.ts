@@ -4,8 +4,8 @@ import validate from '../validate';
 
 export const validateSignIn = (request: Request, response: Response) => {
 	const scheme: Joi.ObjectSchema = Joi.object().keys({
-		id: Joi.string().min(5).max(50).required(),
-		password: Joi.string().min(5).max(1000).required(),
+		email: Joi.string().min(10).max(50).required(),
+		password: Joi.string().min(5).max(100000).required(),
 	});
 
 	return validate(request, response, scheme);

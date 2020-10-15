@@ -27,7 +27,7 @@ export class Reply {
 		nullable: true,
 		default: null,
 	})
-	writer_id: string;
+	writer_idx: number;
 
 	@Column()
 	contents: string;

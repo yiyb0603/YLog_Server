@@ -38,7 +38,7 @@ export default async (request: Request, response: Response) => {
 
 		const commentWriter: User = await userRepository.findOne({
 			where: {
-				id: findComment.writer_id,
+				idx: findComment.writer_idx,
 			},
 		});
 
@@ -54,11 +54,11 @@ export default async (request: Request, response: Response) => {
 		reply.replied_at = new Date();
 		reply.comment_idx = commentIdx;
 		reply.writer = user ? user.name : null;
-		reply.writer_id = user ? user.id : null;
+		reply.writer_idx = user ? user.idx : null;
 
 		if (
 			commentWriter &&
-			commentWriter.id !== user.id &&
+			commentWriter.idx !== user.idx &&
 			commentWriter.fcm_allow
 		) {
 			const { fcm_token } = commentWriter;

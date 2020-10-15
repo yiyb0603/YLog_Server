@@ -6,11 +6,11 @@ import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { memberId } = request.query;
+		const { memberIdx } = request.query;
 
 		const userRepository: Repository<User> = getRepository(User);
 
-		if (!memberId) {
+		if (!memberIdx) {
 			ColorConsole.red(`[400] 검증 오류입니다.`);
 			handleFailed(response, 400, '검증 오류입니다.');
 			return;
@@ -18,7 +18,7 @@ export default async (request: Request, response: Response) => {
 
 		const member: User = await userRepository.findOne({
 			where: {
-				id: memberId,
+				id: memberIdx,
 			},
 		});
 

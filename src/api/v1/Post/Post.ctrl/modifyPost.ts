@@ -52,7 +52,7 @@ export default async (request: Request, response: Response) => {
 		findPost.contents = contents || findPost.contents;
 		findPost.writer = user ? user.name : '관리자';
 		findPost.thumbnail = thumbnail || findPost.thumbnail || 'null';
-		findPost.writer_id = user ? user.id : null;
+		findPost.writer_idx = user ? user.idx : null;
 		findPost.category_idx = categoryIdx || findPost.category_idx;
 		findPost.updated_at = new Date();
 

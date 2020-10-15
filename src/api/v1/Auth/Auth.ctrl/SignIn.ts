@@ -9,7 +9,7 @@ import { handleSuccess, handleFailed } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { id, password }: ISignInTypes = request.body;
+		const { email, password }: ISignInTypes = request.body;
 		const userRepository: Repository<User> = getRepository(User);
 
 		if (!validateSignIn(request, response)) {
@@ -18,14 +18,15 @@ export default async (request: Request, response: Response) => {
 
 		const userInfo: User = await userRepository.findOne({
 			where: {
-				id,
-				password,
+				email,
+				password: password.toLowerCase(),
 			},
 		});
-
+		
+		console.log(password);
 		if (!userInfo) {
-			ColorConsole.red(`[ERROR 401] 아이디 또는 비밀번호가 올바르지 않습니다.`);
-			handleFailed(response, 401, '아이디 또는 비밀번호가 올바르지 않습니다.');
+			ColorConsole.red(`[ERROR 401] 이메일 또는 비밀번호가 올바르지 않습니다.`);
+			handleFailed(response, 401, '이메일 또는 비밀번호가 올바르지 않습니다.');
 			return;
 		}
 
@@ -36,7 +37,7 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const ylogToken: string = await createToken(
-			id,
+			userInfo.idx,
 			userInfo.name,
 			userInfo.is_admin
 		);

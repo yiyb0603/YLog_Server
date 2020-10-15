@@ -1,12 +1,9 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
-	@PrimaryColumn({
-		length: 255,
-		nullable: false,
-	})
-	id: string;
+	@PrimaryGeneratedColumn()
+	idx: number;
 
 	@Column({
 		length: 255,

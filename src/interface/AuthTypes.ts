@@ -9,6 +9,6 @@ export interface ISignUpTypes {
 }
 
 export interface ISignInTypes {
-	id: string;
+	email: string;
 	password: string;
 }
