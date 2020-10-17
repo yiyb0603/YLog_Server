@@ -18,7 +18,6 @@ export default async (request: Request, response: Response) => {
 		const posts: Post[] = await postRepository.find({
 			where: [
 				{ title: Like(`%${keyword}%`) },
-				{ introduction: Like(`%${keyword}%`) },
 			],
 		});
 
