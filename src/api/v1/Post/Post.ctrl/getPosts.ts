@@ -3,13 +3,16 @@ import { Request, Response } from 'express';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { getRepository, Repository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
+import { View } from '../../../../entity/View';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
+		const viewRepository: Repository<View> = getRepository(View);
 
 		let commentLength: number = 0;
+		let viewCount: number = 0;
 
 		const posts: Post[] = await postRepository.find({
 			select: [
@@ -22,6 +25,7 @@ export default async (request: Request, response: Response) => {
 				'writer',
 				'writer_idx',
 				'updated_at',
+				'view_count',
 			],
 		});
 
@@ -35,6 +39,16 @@ export default async (request: Request, response: Response) => {
 			commentLength += count;
 			posts[i].comment_length = commentLength;
 			commentLength = 0;
+
+			const viewNumber: number = await viewRepository.count({
+				where: {
+					post_idx: posts[i].idx,
+				}
+			});
+
+			viewCount += viewNumber;
+			posts[i].view_count = viewCount;
+			viewCount = 0;
 		}
 
 		ColorConsole.green(`[200] 글 목록 조회를 성공하였습니다.`);

@@ -6,6 +6,7 @@ import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Comment } from '../../../../entity/Comment';
 import { User } from 'entity/User';
 import { Reply } from '../../../../entity/Reply';
+import { View } from '../../../../entity/View';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -15,6 +16,7 @@ export default async (request: Request, response: Response) => {
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const replyRepository: Repository<Reply> = getRepository(Reply);
+		const viewRepository: Repository<View> = getRepository(View);
 
 		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
@@ -39,6 +41,12 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
+		const findViews: View[] = await viewRepository.find({
+			where: {
+				post_idx: idx
+			}
+		});
+
 		if (!findPost) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);
 			handleFailed(response, 404, '존재하지 않는 글입니다.');
@@ -54,6 +62,7 @@ export default async (request: Request, response: Response) => {
 		await commentRepository.remove(findComments);
 		await postRepository.remove(findPost);
 		await replyRepository.remove(findReplies);
+		await viewRepository.remove(findViews);
 		ColorConsole.green(`[200] 글 삭제를 성공하였습니다.`);
 		return handleSuccess(response, 200, '글 삭제를 성공하였습니다.');
 	} catch (error) {
