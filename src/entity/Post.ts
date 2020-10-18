@@ -51,6 +51,11 @@ export class Post {
 	})
 	comment_length: number;
 
+	@Column({
+		default: 0,
+	})
+	view_count: number;
+
 	@CreateDateColumn()
 	created_at: Date;
 

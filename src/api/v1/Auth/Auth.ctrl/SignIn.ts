@@ -23,7 +23,6 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 		
-		console.log(password);
 		if (!userInfo) {
 			ColorConsole.red(`[ERROR 401] 이메일 또는 비밀번호가 올바르지 않습니다.`);
 			handleFailed(response, 401, '이메일 또는 비밀번호가 올바르지 않습니다.');
