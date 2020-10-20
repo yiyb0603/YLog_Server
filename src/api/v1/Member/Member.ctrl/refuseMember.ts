@@ -17,7 +17,7 @@ export default async (request: Request, response: Response) => {
 
 		const member: User = await userRepository.findOne({
 			where: {
-				id: memberIdx,
+				idx: memberIdx,
 			},
 		});
 
