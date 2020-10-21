@@ -10,7 +10,7 @@ import SendFCM from '../../../../lib/util/SendFCM';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { postIdx, contents } = request.body;
+		const { postIdx, contents, isPrivate } = request.body;
 
 		const user: User = request.user;
 
@@ -47,6 +47,7 @@ export default async (request: Request, response: Response) => {
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;
+		comment.is_private = isPrivate;
 
 		if ((!user || postWriter.idx !== user.idx) && postWriter.fcm_allow) {
 			const { fcm_token } = postWriter;

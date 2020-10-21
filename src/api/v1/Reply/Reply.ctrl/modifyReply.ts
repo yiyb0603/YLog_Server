@@ -10,7 +10,7 @@ import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx, commentIdx, postIdx, contents } = request.body;
+		const { idx, commentIdx, postIdx, contents, isPrivate } = request.body;
 		const user: User = request.user;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
@@ -45,7 +45,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (user.idx !== findReply.writer_idx) {
+		if (!user || user.idx !== findReply.writer_idx) {
 			ColorConsole.red(`[ERROR 403] 답글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '답글을 수정할 권한이 없습니다.');
 			return;
@@ -57,6 +57,7 @@ export default async (request: Request, response: Response) => {
 		reply.contents = contents;
 		reply.post_idx = postIdx;
 		reply.updated_at = new Date();
+		reply.is_private = isPrivate;
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 수정을 성공하였습니다.`);

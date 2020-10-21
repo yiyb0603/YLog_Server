@@ -13,7 +13,7 @@ export default async (request: Request, response: Response) => {
 	try {
 		const requestData = request.body;
 		const user: User = request.user;
-		const { postIdx, commentIdx, contents } = requestData;
+		const { postIdx, commentIdx, contents, isPrivate } = requestData;
 
 		const userRepository: Repository<User> = getRepository(User);
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -55,12 +55,9 @@ export default async (request: Request, response: Response) => {
 		reply.comment_idx = commentIdx;
 		reply.writer = user ? user.name : null;
 		reply.writer_idx = user ? user.idx : null;
+		reply.is_private = isPrivate;
 
-		if (
-			commentWriter &&
-			commentWriter.idx !== user.idx &&
-			commentWriter.fcm_allow
-		) {
+		if ((!user || commentWriter.idx !== user.idx) && commentWriter.fcm_allow) {
 			const { fcm_token } = commentWriter;
 
 			SendFCM(

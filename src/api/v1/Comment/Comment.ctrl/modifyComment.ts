@@ -9,7 +9,7 @@ import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx, postIdx, contents } = request.body;
+		const { idx, postIdx, contents, isPrivate } = request.body;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -31,7 +31,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (findComment.writer !== user.name || !user.is_admin) {
+		if (!user || findComment.writer_idx !== user.idx) {
 			ColorConsole.red(`[ERROR 403] 댓글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 수정할 권한이 없습니다.');
 			return;
@@ -48,6 +48,7 @@ export default async (request: Request, response: Response) => {
 		comment.post_idx = postIdx;
 		comment.contents = contents || comment.contents;
 		comment.updated_at = new Date();
+		comment.is_private = isPrivate;
 
 		await commentRepository.save(comment);
 		ColorConsole.green(`[200] 댓글 수정을 성공하였습니다.`);
