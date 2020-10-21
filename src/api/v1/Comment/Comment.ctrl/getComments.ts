@@ -36,6 +36,7 @@ export default async (request: Request, response: Response) => {
 				'created_at',
 				'post_idx',
 				'writer',
+				'writer_idx',
 				'updated_at',
 			],
 

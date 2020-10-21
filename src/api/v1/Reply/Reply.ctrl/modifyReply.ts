@@ -45,7 +45,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (user.idx !== findReply.writer_idx) {
+		if (!user || user.idx !== findReply.writer_idx) {
 			ColorConsole.red(`[ERROR 403] 답글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '답글을 수정할 권한이 없습니다.');
 			return;
