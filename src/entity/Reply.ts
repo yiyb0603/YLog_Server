@@ -42,4 +42,7 @@ export class Reply {
 		default: null,
 	})
 	updated_at: Date;
+
+	@Column()
+	is_private: boolean;
 }

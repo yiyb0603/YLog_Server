@@ -10,7 +10,7 @@ import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const { idx, commentIdx, postIdx, contents } = request.body;
+		const { idx, commentIdx, postIdx, contents, isPrivate } = request.body;
 		const user: User = request.user;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
@@ -57,6 +57,7 @@ export default async (request: Request, response: Response) => {
 		reply.contents = contents;
 		reply.post_idx = postIdx;
 		reply.updated_at = new Date();
+		reply.is_private = isPrivate;
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 수정을 성공하였습니다.`);

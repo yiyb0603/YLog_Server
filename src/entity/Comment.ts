@@ -37,4 +37,9 @@ export class Comment {
 
 	@Column()
 	post_idx: number;
+
+	@Column({
+		nullable: false
+	})
+	is_private: boolean;
 }

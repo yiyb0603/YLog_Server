@@ -38,6 +38,7 @@ export default async (request: Request, response: Response) => {
 				'writer',
 				'writer_idx',
 				'updated_at',
+				'is_private',
 			],
 
 			where: {

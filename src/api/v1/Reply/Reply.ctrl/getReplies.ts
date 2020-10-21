@@ -29,6 +29,7 @@ export default async (request: Request, response: Response) => {
 				'comment_idx',
 				'writer',
 				'writer_idx',
+				'is_private',
 			],
 		});
 
