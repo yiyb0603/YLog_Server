@@ -6,6 +6,7 @@ import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Comment } from '../../../../entity/Comment';
 import { View } from '../../../../entity/View';
 import { sha512 } from 'js-sha512';
+import { Reply } from '../../../../entity/Reply';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -13,6 +14,7 @@ export default async (request: Request, response: Response) => {
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const viewRepository: Repository<View> = getRepository(View);
+		const replyRepository: Repository<Reply> = getRepository(Reply);
 
 		const userIp: string = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
 		const encryptionIp = sha512(userIp);
@@ -34,13 +36,19 @@ export default async (request: Request, response: Response) => {
 			return handleFailed(response, 404, '존재하지 않는 글입니다.');
 		}
 
-		const count: number = await commentRepository.count({
+		const commentCount: number = await commentRepository.count({
 			where: {
 				post_idx: idx,
 			},
 		});
 
-		commentLength += count;
+		const replyCount: number = await replyRepository.count({
+			where: {
+				post_idx: idx,
+			}
+		});
+
+		commentLength += commentCount + replyCount;
 		post.comment_length = commentLength;
 		commentLength = 0;
 
