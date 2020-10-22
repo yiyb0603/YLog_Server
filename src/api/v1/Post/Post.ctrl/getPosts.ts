@@ -4,11 +4,13 @@ import ColorConsole from '../../../../lib/ColorConsole';
 import { getRepository, Repository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
 import { View } from '../../../../entity/View';
+import { Reply } from '../../../../entity/Reply';
 
 export default async (request: Request, response: Response) => {
 	try {
 		const postRepository: Repository<Post> = getRepository(Post);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
+		const replyRepository: Repository<Reply> = getRepository(Reply);
 		const viewRepository: Repository<View> = getRepository(View);
 
 		let commentLength: number = 0;
@@ -30,13 +32,19 @@ export default async (request: Request, response: Response) => {
 		});
 
 		for (let i = 0; i < posts.length; i++) {
-			const count: number = await commentRepository.count({
+			const commentCount: number = await commentRepository.count({
 				where: {
 					post_idx: posts[i].idx,
 				},
 			});
 
-			commentLength += count;
+			const replyCount: number = await replyRepository.count({
+				where: {
+					post_idx: posts[i].idx,
+				}
+			});
+
+			commentLength += commentCount + replyCount;
 			posts[i].comment_length = commentLength;
 			commentLength = 0;
 
