@@ -16,11 +16,15 @@ export default async (request: Request, response: Response) => {
 		});
 
 		for (let i = 0; i < categories.length; i++) {
+			const sqlString: string = `
+				category_idx = ${categories[i].idx} AND
+				(LOWER( title ) LIKE '${keyword ? `%${keyword.toLowerCase()}%` : `%%`}'
+				OR
+				LOWER( introduction ) LIKE '${keyword ? `%${keyword.toLowerCase()}%` : `%%`}');
+				`;
+
 			const count: number = await postRepository.count({
-				where: { 
-					category_idx: categories[i].idx,
-					title: Like(`%${keyword ? keyword : ''}%`),
-				}
+				where: sqlString
 			});
 
 			categories[i].post_count = count;
