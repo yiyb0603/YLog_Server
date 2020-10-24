@@ -29,6 +29,10 @@ export default async (request: Request, response: Response) => {
 				'updated_at',
 				'view_count',
 			],
+			
+			order: {
+				created_at: 'DESC',
+			},
 		});
 
 		for (let i = 0; i < posts.length; i++) {

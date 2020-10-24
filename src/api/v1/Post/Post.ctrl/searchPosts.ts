@@ -15,10 +15,9 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
+		const sqlString: string = `LOWER( title ) LIKE '%${keyword.toLowerCase()}%' or LOWER( introduction ) LIKE '%${keyword.toLowerCase()}%';`;
 		const posts: Post[] = await postRepository.find({
-			where: [
-				{ title: Like(`%${keyword}%`) },
-			],
+			where: sqlString,
 		});
 
 		ColorConsole.green(`[200] 블로그 글 검색을 성공하였습니다.`);
