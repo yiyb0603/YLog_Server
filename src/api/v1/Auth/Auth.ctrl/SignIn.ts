@@ -38,7 +38,8 @@ export default async (request: Request, response: Response) => {
 		const ylogToken: string = await createToken(
 			userInfo.idx,
 			userInfo.name,
-			userInfo.is_admin
+			userInfo.email,
+			userInfo.is_admin,
 		);
 
 		ColorConsole.green(`[200]	로그인에 성공하였습니다.`);
