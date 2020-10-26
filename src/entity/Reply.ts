@@ -4,15 +4,27 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	Entity,
+	ManyToOne,
+	JoinColumn,
 } from 'typeorm';
+import { Comment } from './Comment';
+import { Post } from './Post';
 
 @Entity('reply')
 export class Reply {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
+	@ManyToOne(() => Post, { onDelete: "CASCADE" })
+	@JoinColumn({ name: "post_idx" })
+	post: Post;
+
 	@Column()
 	post_idx: number;
+
+	@ManyToOne(() => Comment, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "comment_idx" })
+  comment: Comment;
 
 	@Column()
 	comment_idx: number;

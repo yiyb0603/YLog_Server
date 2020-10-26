@@ -26,13 +26,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		const findReplies: Reply[] = await replyRepository.find({
-			where: {
-				comment_idx: idx,
-			},
-		});
-
-		if (findComment.writer !== user.name && (!user || !user.is_admin)) {
+		if ((!user || !user.is_admin) && findComment.writer !== user.name) {
 			ColorConsole.red(`[ERROR 403] 댓글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 삭제할 권한이 없습니다.');
 			return;
@@ -45,7 +39,6 @@ export default async (request: Request, response: Response) => {
 		}
 
 		await commentRepository.remove(findComment);
-		await replyRepository.remove(findReplies);
 		ColorConsole.green(`[200] 댓글 삭제를 성공하였습니다.`);
 		handleSuccess(response, 200, '댓글 삭제를 성공하였습니다.');
 		return;

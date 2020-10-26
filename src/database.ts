@@ -7,7 +7,7 @@ export const getConnection = async (): Promise<Connection> => {
 	const connectionOptions: ConnectionOptions = {
 		type: 'mysql',
 		database: process.env.DATABASE,
-		synchronize: false,
+		synchronize: true,
 		logging: false,
 		entities,
 		host: process.env.DB_HOST,

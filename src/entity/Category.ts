@@ -12,6 +12,7 @@ export class Category {
 
 	@Column({
 		nullable: false,
+		default: 0,
 	})
 	post_count: number;
 }

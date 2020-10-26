@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Post } from "./Post";
 
 @Entity('view')
 export class View {
@@ -9,6 +10,10 @@ export class View {
     nullable: false,
   })
   user_ip: string;
+
+  @ManyToOne(() => Post, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'post_idx' })
+  post: Post;
 
   @Column({
     default: 0,
