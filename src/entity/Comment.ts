@@ -4,7 +4,10 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	Entity,
+	ManyToOne,
+	JoinColumn,
 } from 'typeorm';
+import { Post } from './Post';
 
 @Entity('comment')
 export class Comment {
@@ -34,6 +37,10 @@ export class Comment {
 		default: null,
 	})
 	updated_at: Date;
+
+	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
+	@JoinColumn({ name: 'post_idx' })
+	post: Post;
 
 	@Column()
 	post_idx: number;

@@ -39,6 +39,7 @@ export default async (request: Request, response: Response) => {
 			userInfo.idx,
 			userInfo.name,
 			userInfo.email,
+			userInfo.profile_image,
 			userInfo.is_admin,
 		);
 

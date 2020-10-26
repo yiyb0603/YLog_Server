@@ -4,7 +4,10 @@ import {
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
+	ManyToOne,
+	JoinColumn,
 } from 'typeorm';
+import { Category } from './Category';
 
 @Entity('post')
 export class Post {
@@ -41,8 +44,12 @@ export class Post {
 	})
 	thumbnail: string | null;
 
+	@ManyToOne(() => Category, { onDelete: 'SET NULL' })
+	@JoinColumn({ name: 'category_idx' })
+	category: Category;
+
 	@Column({
-		nullable: false
+		nullable: true
 	})
 	category_idx: number;
 

@@ -4,6 +4,7 @@ import { validateModifyProfile } from '../../../lib/validation/Profile/modifyPro
 import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../lib/Response';
+import { profile } from 'console';
 
 export default async (request: Request, response: Response) => {
   try {
@@ -26,9 +27,10 @@ export default async (request: Request, response: Response) => {
       return;
     }
 
+    console.log(profileImage);
     user.email = email || user.email;
     user.name = name || user.name;
-    user.profile_image = profileImage || user.profile_image;
+    user.profile_image = profileImage === null ? null : profileImage;
 
     await userRepository.save(user);
     ColorConsole.green(`[200] 회원 정보를 수정하였습니다.`);
