@@ -55,6 +55,7 @@ export default async (request: Request, response: Response) => {
 		reply.comment_idx = commentIdx;
 		reply.writer = user ? user.name : null;
 		reply.writer_idx = user ? user.idx : null;
+		reply.writer_profile = user ? user.profile_image : null;
 		reply.is_private = isPrivate;
 
 		if ((!user || commentWriter.idx !== user.idx) && commentWriter.fcm_allow) {
@@ -62,8 +63,8 @@ export default async (request: Request, response: Response) => {
 
 			SendFCM(
 				fcm_token,
-				user
-					? `${user.name}님이 답글을 남기셨습니다.`
+				commentWriter
+					? `${commentWriter.name}님이 답글을 남기셨습니다.`
 					: '게스트님이 답글을 남기셨습니다.',
 				contents.length > 16
 					? contents.substring(0, 16).concat('...')

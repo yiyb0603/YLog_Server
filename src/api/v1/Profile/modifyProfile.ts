@@ -27,7 +27,6 @@ export default async (request: Request, response: Response) => {
       return;
     }
 
-    console.log(profileImage);
     user.email = email || user.email;
     user.name = name || user.name;
     user.profile_image = profileImage === null ? null : profileImage;
