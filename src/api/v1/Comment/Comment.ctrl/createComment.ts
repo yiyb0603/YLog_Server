@@ -11,7 +11,6 @@ import SendFCM from '../../../../lib/util/SendFCM';
 export default async (request: Request, response: Response) => {
 	try {
 		const { postIdx, contents, isPrivate } = request.body;
-
 		const user: User = request.user;
 
 		const userRepository: Repository<User> = getRepository(User);
@@ -44,6 +43,7 @@ export default async (request: Request, response: Response) => {
 		comment.post_idx = postIdx;
 		comment.writer_idx = user ? user.idx : null;
 		comment.writer = user ? user.name : null;
+		comment.writer_profile = user ? user.profile_image : null;
 		comment.contents = contents;
 		comment.created_at = new Date();
 		comment.updated_at = null;

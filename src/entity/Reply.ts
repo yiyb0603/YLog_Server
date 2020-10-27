@@ -41,6 +41,12 @@ export class Reply {
 	})
 	writer_idx: number;
 
+	@Column({
+		nullable: true,
+		default: null,
+	})
+	writer_profile: string;
+
 	@Column()
 	contents: string;
 
