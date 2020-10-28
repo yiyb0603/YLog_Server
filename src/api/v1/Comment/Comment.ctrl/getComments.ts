@@ -56,8 +56,11 @@ export default async (request: Request, response: Response) => {
 				},
 			});
 
-			comments[i].writer_profile = userProfiles.profile_image;
+			if (comments[i].writer_profile) {
+				comments[i].writer_profile = userProfiles.profile_image;
+			}
 		}
+		
 
 		ColorConsole.green(`[200] 댓글 목록 조회에 성공하였습니다.`);
 		handleSuccess(response, 200, '댓글 목록 조회에 성공하였습니다.', {

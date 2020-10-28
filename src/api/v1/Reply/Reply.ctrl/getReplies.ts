@@ -43,7 +43,9 @@ export default async (request: Request, response: Response) => {
 				},
 			});
 
-			replies[i].writer_profile = userProfiles.profile_image;
+			if (replies[i].writer_profile) {
+				replies[i].writer_profile = userProfiles.profile_image;
+			}
 		}
 
 		ColorConsole.green(`[200] 답글 조회에 성공하였습니다.`);
