@@ -14,6 +14,7 @@ export default async (request: Request, response: Response) => {
 		const requestData = request.body;
 		const user: User = request.user;
 		const { postIdx, commentIdx, contents, isPrivate } = requestData;
+		let commentWriter: User | null = null;
 
 		const userRepository: Repository<User> = getRepository(User);
 		const postRepository: Repository<Post> = getRepository(Post);
@@ -36,15 +37,23 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		const commentWriter: User = await userRepository.findOne({
-			where: {
-				idx: findComment.writer_idx,
-			},
-		});
+		if (findComment.writer_idx) {
+			commentWriter = await userRepository.findOne({
+				where: {
+					idx: findComment.writer_idx,
+				},
+			});
+		}
 
 		if (!findPost || !findComment) {
 			ColorConsole.red(`[ERROR 404] 해당 게시글 또는 댓글이 없습니다.`);
 			handleFailed(response, 404, '해당 게시글 또는 댓글이 없습니다.');
+			return;
+		}
+
+		if (!findComment.writer_idx && isPrivate) {
+			ColorConsole.red(`[ERROR 401] 비회원 댓글은 비공개 답글 작성이 불가능합니다.`);
+			handleFailed(response, 401, '비회원 댓글은 비공개 답글 작성이 불가능합니다.');
 			return;
 		}
 
@@ -58,7 +67,7 @@ export default async (request: Request, response: Response) => {
 		reply.writer_profile = user ? user.profile_image : null;
 		reply.is_private = isPrivate;
 
-		if ((!user || commentWriter.idx !== user.idx) && commentWriter.fcm_allow) {
+		if (!user || (commentWriter && (commentWriter.idx !== user.idx)) && commentWriter.fcm_allow) {
 			const { fcm_token } = commentWriter;
 
 			SendFCM(
