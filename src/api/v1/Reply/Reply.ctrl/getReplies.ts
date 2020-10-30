@@ -43,11 +43,12 @@ export default async (request: Request, response: Response) => {
 				},
 			});
 
-			if (replies[i].writer_profile) {
+			if (userProfiles) {
 				replies[i].writer_profile = userProfiles.profile_image;
 			}
 		}
 
+		await replyRepository.save(replies);
 		ColorConsole.green(`[200] 답글 조회에 성공하였습니다.`);
 		handleSuccess(response, 200, '답글 조회에 성공하였습니다', { replies });
 		return;
