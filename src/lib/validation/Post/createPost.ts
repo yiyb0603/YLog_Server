@@ -6,7 +6,7 @@ export const validateCreatePost = (request: Request, response: Response) => {
 	const scheme: Joi.ObjectSchema = Joi.object().keys({
 		title: Joi.string().min(1).max(255).required(),
 		introduction: Joi.string().min(1).max(255).required(),
-		contents: Joi.string().min(1).max(100000).required(),
+		contents: Joi.string().min(1).required(),
 		categoryIdx: Joi.number().integer().required(),
 		thumbnail: Joi.string().max(10000).allow(null),
 	});

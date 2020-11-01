@@ -3,7 +3,6 @@ import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Category } from '../../../../entity/Category';
 import { validateCreatePost } from '../../../../lib/validation/Post/createPost';
-import { decodeToken } from '../../../../lib/token';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { User } from 'entity/User';
