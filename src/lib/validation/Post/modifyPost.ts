@@ -7,7 +7,7 @@ export const validateModifyPost = (request: Request, response: Response) => {
 		idx: Joi.number().integer().required(),
 		introduction: Joi.string().min(1).max(255),
 		title: Joi.string().min(1).max(255),
-		contents: Joi.string().min(1).max(100000),
+		contents: Joi.string().min(1),
 		writer: Joi.string(),
 		thumbnail: Joi.string().max(10000).allow(null),
 		categoryIdx: Joi.number().integer(),
