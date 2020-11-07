@@ -67,7 +67,7 @@ export default async (request: Request, response: Response) => {
 		reply.writer_profile = user ? user.profile_image : null;
 		reply.is_private = isPrivate;
 
-		if (!user || (commentWriter && (commentWriter.idx !== user.idx)) && commentWriter.fcm_allow) {
+		if ((user && commentWriter) && (commentWriter.idx !== user.idx) && commentWriter.fcm_allow) {
 			const { fcm_token } = commentWriter;
 
 			SendFCM(
