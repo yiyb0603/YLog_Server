@@ -21,13 +21,19 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		const findPost: Post = await postRepository.findOne({
+		const post: Post = await postRepository.findOne({
 			where: {
 				idx: postIdx,
 			},
 		});
 
-		if (!findPost) {
+		if (post.is_temp) {
+			ColorConsole.red(`[ERROR 401] 임시저장 글에는 댓글 작성이 불가능합니다.`);
+			handleFailed(response, 401, '임시저장 글에는 댓글 작성이 불가능합니다.');
+			return;
+		}
+
+		if (!post) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글입니다.`);
 			handleFailed(response, 404, '존재하지 않는 글입니다.');
 			return;
@@ -35,7 +41,7 @@ export default async (request: Request, response: Response) => {
 
 		const postWriter: User = await userRepository.findOne({
 			where: {
-				idx: findPost.writer_idx,
+				idx: post.writer_idx,
 			},
 		});
 

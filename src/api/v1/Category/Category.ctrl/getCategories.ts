@@ -18,6 +18,7 @@ export default async (request: Request, response: Response) => {
 		for (let i = 0; i < categories.length; i++) {
 			const sqlString: string = `
 				category_idx = ${categories[i].idx} AND
+				is_temp = false AND
 				(LOWER( title ) LIKE '${keyword ? `%${keyword.toLowerCase()}%` : `%%`}'
 				OR
 				LOWER( introduction ) LIKE '${keyword ? `%${keyword.toLowerCase()}%` : `%%`}');

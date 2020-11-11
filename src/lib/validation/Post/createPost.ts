@@ -9,6 +9,7 @@ export const validateCreatePost = (request: Request, response: Response) => {
 		contents: Joi.string().min(1).required(),
 		categoryIdx: Joi.number().integer().required(),
 		thumbnail: Joi.string().max(10000).allow(null),
+		isTemp: Joi.boolean().required(),
 	});
 
 	return validate(request, response, scheme);

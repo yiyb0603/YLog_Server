@@ -28,6 +28,7 @@ export default async (request: Request, response: Response) => {
 				'writer_idx',
 				'updated_at',
 				'view_count',
+				'is_temp',
 			],
 			
 			order: {

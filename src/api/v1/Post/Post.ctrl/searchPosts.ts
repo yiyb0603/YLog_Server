@@ -15,7 +15,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		const sqlString: string = `LOWER( title ) LIKE '%${keyword.toLowerCase()}%' or LOWER( introduction ) LIKE '%${keyword.toLowerCase()}%';`;
+		const sqlString: string = `is_temp = false AND LOWER( title ) LIKE '%${keyword.toLowerCase()}%' or LOWER( introduction ) LIKE '%${keyword.toLowerCase()}%';`;
 		const posts: Post[] = await postRepository.find({
 			where: sqlString,
 		});
