@@ -63,6 +63,11 @@ export class Post {
 	})
 	view_count: number;
 
+	@Column({
+		nullable: false,
+	})
+	is_temp: boolean;
+
 	@CreateDateColumn()
 	created_at: Date;
 

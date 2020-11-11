@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Repository, ConnectionOptionsReader } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Category } from '../../../../entity/Category';
 import { validateModifyPost } from '../../../../lib/validation/Post/modifyPost';
@@ -17,6 +17,7 @@ export default async (request: Request, response: Response) => {
 			updatedAt,
 			categoryIdx,
 			introduction,
+			isTemp
 		} = request.body;
 		const user: User = request.user;
 
@@ -27,19 +28,19 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		const findPost: Post = await postRepository.findOne({
+		const post: Post = await postRepository.findOne({
 			where: {
 				idx,
 			},
 		});
 
-		const findCategory: Category = await categoryRepository.findOne({
+		const category: Category = await categoryRepository.findOne({
 			where: {
 				idx: categoryIdx,
 			},
 		});
 
-		if (!findPost || !findCategory) {
+		if (!post || !category) {
 			ColorConsole.red(`[ERROR 404] 존재하지 않는 글 또는 카테고리 입니다.`);
 			return response.status(404).json({
 				status: 404,
@@ -47,16 +48,17 @@ export default async (request: Request, response: Response) => {
 			});
 		}
 
-		findPost.title = title || findPost.title;
-		findPost.introduction = introduction || findPost.introduction;
-		findPost.contents = contents || findPost.contents;
-		findPost.writer = user ? user.name : '관리자';
-		findPost.thumbnail = thumbnail || findPost.thumbnail || 'null';
-		findPost.writer_idx = user ? user.idx : null;
-		findPost.category_idx = categoryIdx || findPost.category_idx;
-		findPost.updated_at = new Date();
+		post.title = title || post.title;
+		post.introduction = introduction || post.introduction;
+		post.contents = contents || post.contents;
+		post.writer = user ? user.name : '관리자';
+		post.thumbnail = thumbnail || post.thumbnail || 'null';
+		post.writer_idx = user ? user.idx : null;
+		post.category_idx = categoryIdx || post.category_idx;
+		post.updated_at = isTemp ? post.created_at : new Date();
+		post.is_temp = isTemp;
 
-		await postRepository.save(findPost);
+		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 수정에 성공하였습니다.`);
 		return response.status(200).json({
 			status: 200,

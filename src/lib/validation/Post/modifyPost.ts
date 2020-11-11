@@ -11,6 +11,7 @@ export const validateModifyPost = (request: Request, response: Response) => {
 		writer: Joi.string(),
 		thumbnail: Joi.string().max(10000).allow(null),
 		categoryIdx: Joi.number().integer(),
+		isTemp: Joi.boolean(),
 	});
 
 	return validate(request, response, scheme);

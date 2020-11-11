@@ -15,6 +15,7 @@ export default async (request: Request, response: Response) => {
 			thumbnail,
 			categoryIdx,
 			introduction,
+			isTemp,
 		} = request.body;
 		const user: User = request.user;
 
@@ -44,7 +45,8 @@ export default async (request: Request, response: Response) => {
 		post.writer_idx = user && user.idx;
 		post.contents = contents;
 		post.thumbnail = thumbnail || null;
-		post.created_at = new Date();
+		post.is_temp = isTemp;
+		post.created_at = isTemp ? null : new Date();
 		post.updated_at = null;
 
 		await postRepository.save(post);
