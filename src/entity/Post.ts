@@ -6,6 +6,7 @@ import {
 	UpdateDateColumn,
 	ManyToOne,
 	JoinColumn,
+	Like,
 } from 'typeorm';
 import { Category } from './Category';
 
