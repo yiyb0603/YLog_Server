@@ -9,6 +9,7 @@ import Upload from './Upload';
 import Notice from './Notice';
 import Release from './Release';
 import Profile from './Profile';
+import Like from './Like';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/upload', Upload);
 router.use('/notice', Notice);
 router.use('/release', Release);
 router.use('/profile', Profile);
+router.use('/like', Like);
 
 export default router;

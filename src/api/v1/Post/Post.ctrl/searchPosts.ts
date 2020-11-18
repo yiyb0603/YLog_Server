@@ -1,6 +1,6 @@
 import { Post } from '../../../../entity/Post';
 import { Request, Response } from 'express';
-import { getRepository, Like, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
