@@ -5,6 +5,7 @@ import { getRepository, Repository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
 import { View } from '../../../../entity/View';
 import { Reply } from '../../../../entity/Reply';
+import { Like } from '../../../../entity/Like';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -12,9 +13,11 @@ export default async (request: Request, response: Response) => {
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const replyRepository: Repository<Reply> = getRepository(Reply);
 		const viewRepository: Repository<View> = getRepository(View);
+		const likeRepostory: Repository<Like> = getRepository(Like);
 
 		let commentLength: number = 0;
 		let viewCount: number = 0;
+		let likeCount: number = 0;
 
 		const posts: Post[] = await postRepository.find({
 			select: [
@@ -29,6 +32,7 @@ export default async (request: Request, response: Response) => {
 				'updated_at',
 				'view_count',
 				'is_temp',
+				'like_count',
 			],
 			
 			order: {
@@ -58,6 +62,20 @@ export default async (request: Request, response: Response) => {
 					post_idx: posts[i].idx,
 				}
 			});
+
+			viewCount += viewNumber;
+			posts[i].view_count = viewCount;
+			viewCount = 0;
+
+			const likeNumber: number = await likeRepostory.count({
+				where: {
+					post_idx: posts[i].idx,
+				}
+			});
+
+			likeCount += likeNumber;
+			posts[i].like_count = likeCount;
+			likeCount = 0;
 
 			viewCount += viewNumber;
 			posts[i].view_count = viewCount;
