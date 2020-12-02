@@ -6,7 +6,6 @@ import {
 	UpdateDateColumn,
 	ManyToOne,
 	JoinColumn,
-	Like,
 } from 'typeorm';
 import { Category } from './Category';
 
@@ -53,6 +52,11 @@ export class Post {
 		nullable: true
 	})
 	category_idx: number;
+
+	@Column({
+		default: 0,
+	})
+	like_count: number;
 
 	@Column({
 		default: 0,
