@@ -13,11 +13,13 @@ export class Notice {
 
 	@Column({
 		nullable: false,
+		type: 'text',
 	})
 	title: string;
 
 	@Column({
 		nullable: false,
+		type: 'text',
 	})
 	contents: string;
 

@@ -15,17 +15,20 @@ export class Post {
 	idx: number;
 
 	@Column({
-		nullable: false
+		nullable: false,
+		type: 'text',
 	})
 	title: string;
 
 	@Column({
-		nullable: false
+		nullable: false,
+		type: 'text',
 	})
 	introduction: string;
 
 	@Column({
-		nullable: false
+		nullable: false,
+		type: 'text',
 	})
 	contents: string;
 
@@ -73,7 +76,10 @@ export class Post {
 	})
 	is_temp: boolean;
 
-	@CreateDateColumn()
+	@CreateDateColumn({
+		nullable: true,
+		default: null,
+	})
 	created_at: Date;
 
 	@UpdateDateColumn({
