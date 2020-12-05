@@ -18,6 +18,7 @@ export class Release {
 
 	@Column({
 		nullable: false,
+		type: 'text',
 	})
 	contents: string;
 
