@@ -55,7 +55,7 @@ export default async (request: Request, response: Response) => {
 		post.thumbnail = thumbnail || post.thumbnail || 'null';
 		post.writer_idx = user ? user.idx : null;
 		post.category_idx = categoryIdx || post.category_idx;
-		post.updated_at = isTemp ? post.created_at : new Date();
+		post.updated_at = isTemp ? null : new Date();
 		post.is_temp = isTemp;
 
 		await postRepository.save(post);
