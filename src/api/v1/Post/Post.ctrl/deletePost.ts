@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
-import ColorConsole from '../../../../lib/ColorConsole';
 import { getRepository, Repository } from 'typeorm';
+import ColorConsole from '../../../../lib/ColorConsole';
 import { Post } from '../../../../entity/Post';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { Comment } from '../../../../entity/Comment';
 import { User } from 'entity/User';
-import { Reply } from '../../../../entity/Reply';
-import { View } from '../../../../entity/View';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -14,9 +11,6 @@ export default async (request: Request, response: Response) => {
 		const user: User = request.user;
 
 		const postRepository: Repository<Post> = getRepository(Post);
-		const commentRepository: Repository<Comment> = getRepository(Comment);
-		const replyRepository: Repository<Reply> = getRepository(Reply);
-		const viewRepository: Repository<View> = getRepository(View);
 
 		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
@@ -35,7 +29,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (findPost.writer_idx !== user.idx && (!user || !user.is_admin)) {
+		if (findPost.fk_user_idx !== user.idx && (!user || !user.isAdmin)) {
 			ColorConsole.red(`[ERROR 403] 글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '글을 삭제할 권한이 없습니다.');
 			return;

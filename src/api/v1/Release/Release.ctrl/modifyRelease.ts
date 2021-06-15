@@ -34,7 +34,7 @@ export default async (request: Request, response: Response) => {
     release.title = title || release.title;
     release.contents = contents || release.contents;
     release.updated_at = updatedAt;
-    release.writer = user.name || release.writer;
+    release.user = user || release.user;
 
     await releaseRepository.save(release);
     ColorConsole.green(`[200] 릴리즈 노트를 수정하였습니다.`);

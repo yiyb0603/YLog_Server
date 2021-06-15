@@ -33,8 +33,8 @@ export default async (request: Request, response: Response) => {
     }
 
     const like: Like = new Like();
-    like.post_idx = postIdx;
-    like.user_idx = user.idx;
+    like.post = post;
+    like.user = user;
     
     await likeRepository.save(like);
     ColorConsole.green(`[200] 글 좋아요를 성공하였습니다.`);

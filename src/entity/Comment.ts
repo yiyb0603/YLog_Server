@@ -8,51 +8,46 @@ import {
 	JoinColumn,
 } from 'typeorm';
 import { Post } from './Post';
+import { User } from './User';
 
 @Entity('comment')
 export class Comment {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@Column({
-		nullable: true,
-		default: null,
+	@ManyToOne((type) => User, {
+		onDelete: 'SET NULL',
 	})
-	writer: string;
-
-	@Column({
-		nullable: true,
-		default: null,
+	@JoinColumn({
+		name: 'fk_user_idx',
 	})
-	writer_idx: number;
-
-	@Column({
-		nullable: true,
-		default: null,
-	})
-	writer_profile: string;
+	user: User;
 
 	@Column()
 	contents: string;
 
-	@CreateDateColumn()
-	created_at: Date;
+	@CreateDateColumn({
+		name: 'created_at',
+	})
+	createdAt: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
 		default: null,
+		name: 'updated_at',
 	})
-	updated_at: Date;
+	updatedAt: Date;
 
 	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
-	@JoinColumn({ name: 'post_idx' })
+	@JoinColumn({ name: 'fk_post_idx' })
 	post: Post;
 
 	@Column()
-	post_idx: number;
+	fk_post_idx: number;
 
 	@Column({
-		nullable: false
+		nullable: false,
+		name: 'is_private',
 	})
-	is_private: boolean;
+	isPrivate: boolean;
 }

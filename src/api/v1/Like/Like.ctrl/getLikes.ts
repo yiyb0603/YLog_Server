@@ -27,13 +27,13 @@ export default async (request: Request, response: Response) => {
     const likes: Like[] = await likeRepository.find({
       select: [
         'idx',
-        'user_idx',
-        'post_idx'
+        'user',
+        'post',
       ],
       
       where: {
-        post_idx: postIdx,
-      }
+        fk_post_idx: postIdx,
+      },
     });
 
     ColorConsole.green(`[200] 좋아요 목록을 조회하였습니다.`);

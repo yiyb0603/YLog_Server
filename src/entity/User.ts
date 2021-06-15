@@ -3,59 +3,65 @@ import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeor
 @Entity('user')
 export class User {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
+
+	@Column({
+		nullable: false,
+	})
+	name!: string;
+
+	@Column({
+		nullable: false,
+	})
+	password!: string;
 
 	@Column({
 		length: 255,
 		nullable: false,
+		unique: true,
 	})
-	name: string;
-
-	@Column({
-		length: 255,
-		nullable: false,
-	})
-	password: string;
-
-	@Column({
-		length: 255,
-		nullable: false,
-	})
-	email: string;
+	email!: string;
 
 	@Column('timestamptz')
 	@CreateDateColumn({
 		nullable: true,
 		default: null,
+		name: 'joined_at',
 	})
-	joined_at: Date;
+	joinedAt: Date;
 
 	@Column({
 		length: 1000,
 		nullable: true,
+		name: 'profile_image',
 	})
-	profile_image: string;
+	profileImage: string;
 
 	@Column({
 		nullable: false,
+		type: 'boolean',
+		name: 'is_admin',
 	})
-	is_admin: boolean;
+	isAdmin!: boolean;
 
 	@Column({
 		nullable: true,
 		default: null,
+		name: 'fcm_token',
 	})
-	fcm_token: string;
+	fcmToken: string;
 
 	@Column({
 		nullable: true,
 		default: false,
+		name: 'fcm_allow',
 	})
-	fcm_allow: boolean;
+	fcmAllow: boolean;
 
 	@Column({
 		nullable: true,
 		default: null,
+		name: 'is_allow',
 	})
-	is_allow: boolean;
+	isAllow: boolean;
 }

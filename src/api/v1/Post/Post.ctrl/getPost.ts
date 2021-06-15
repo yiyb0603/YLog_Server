@@ -38,31 +38,31 @@ export default async (request: Request, response: Response) => {
 
 		const commentCount: number = await commentRepository.count({
 			where: {
-				post_idx: idx,
+				fk_post_idx: idx,
 			},
 		});
 
 		const replyCount: number = await replyRepository.count({
 			where: {
-				post_idx: idx,
-			}
+				fk_post_idx: idx,
+			},
 		});
 
 		commentLength += commentCount + replyCount;
-		post.comment_length = commentLength;
+		post.commentCount = commentLength;
 		commentLength = 0;
 
 		const userExistView = await viewRepository.findOne({
 			where: {
 				user_ip: encryptionIp,
-				post_idx: post.idx,
+				fk_post_idx: post.idx,
 			}
 		});
 
 		if (!userExistView) {
 			const view: View = new View();
-			view.user_ip = encryptionIp;
-			view.post_idx = post.idx;
+			view.userIp = encryptionIp;
+			view.post = post;
 
 			await viewRepository.save(view);
 		}

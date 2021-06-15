@@ -1,5 +1,5 @@
-import { User } from '../../../../entity/User';
 import { Request, Response } from 'express';
+import { User } from '../../../../entity/User';
 import { getRepository, Repository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
 import { Post } from '../../../../entity/Post';
@@ -13,7 +13,7 @@ export default async (request: Request, response: Response) => {
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const postRepository: Repository<Post> = getRepository(Post);
-		const user: User = request.user;
+		const user: User = request.user || null;
 
 		if (!validateModifyComment(request, response)) {
 			return;
@@ -31,7 +31,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (!user || findComment.writer_idx !== user.idx) {
+		if (!user || findComment.user.idx !== user.idx) {
 			ColorConsole.red(`[ERROR 403] 댓글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 수정할 권한이 없습니다.');
 			return;
@@ -45,9 +45,8 @@ export default async (request: Request, response: Response) => {
 
 		const comment: Comment = new Comment();
 		comment.idx = idx;
-		comment.post_idx = postIdx;
+		comment.post = findPost;
 		comment.contents = contents || comment.contents;
-		comment.updated_at = new Date();
 		comment.is_private = isPrivate;
 
 		await commentRepository.save(comment);

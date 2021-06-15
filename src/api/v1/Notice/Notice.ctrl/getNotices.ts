@@ -9,7 +9,11 @@ export default async (request: Request, response: Response) => {
 		const noticeRepository: Repository<Notice> = getRepository(Notice);
 
 		const notices: Notice[] = await noticeRepository.find({
-			select: ['idx', 'title', 'writer'],
+			select: [
+				'idx',
+				'title',
+				'user',
+			],
 		});
 
 		ColorConsole.green(`[200] 공지사항 조회를 성공하였습니다.`);

@@ -27,7 +27,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		member.is_allow = false;
+		member.isAllow = false;
 		await userRepository.save(member);
 
 		ColorConsole.green(`[200] 회원 가입 거절을 성공하였습니다.`);

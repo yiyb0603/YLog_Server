@@ -27,8 +27,8 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		member.is_allow = true;
-		member.joined_at = new Date();
+		member.isAdmin = true;
+		member.joinedAt = new Date();
 		await userRepository.save(member);
 
 		ColorConsole.green(`[200] 회원 가입 승인을 성공하였습니다.`);

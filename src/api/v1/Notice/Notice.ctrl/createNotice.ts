@@ -20,7 +20,7 @@ export default async (request: Request, response: Response) => {
 		const notice: Notice = new Notice();
 		notice.title = title;
 		notice.contents = contents;
-		notice.writer = user ? user.name : '관리자';
+		notice.user = user;
 		notice.created_at = new Date();
 
 		await noticeRepository.save(notice);

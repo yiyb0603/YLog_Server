@@ -8,6 +8,7 @@ import {
 	JoinColumn,
 } from 'typeorm';
 import { Category } from './Category';
+import { User } from './User';
 
 @Entity('post')
 export class Post {
@@ -32,59 +33,48 @@ export class Post {
 	})
 	contents: string;
 
-	@Column({
-		nullable: true,
+	@ManyToOne(() => User)
+	@JoinColumn({
+		name: 'fk_user_idx',
 	})
-	writer: string | null;
+	user: User;
 
-	@Column({
-		nullable: false
-	})
-	writer_idx: number;
+	@Column()
+	fk_user_idx: number;
 
 	@Column({
 		nullable: true,
 	})
 	thumbnail: string | null;
 
-	@ManyToOne(() => Category, { onDelete: 'SET NULL' })
-	@JoinColumn({ name: 'category_idx' })
+	@ManyToOne(() => Category, { onDelete: 'CASCADE' })
+	@JoinColumn({ name: 'fk_category_idx' })
 	category: Category;
 
-	@Column({
-		nullable: true
-	})
-	category_idx: number;
+	@Column()
+	fk_category_idx: number;
+
+	likeCount: number;
+	commentCount: number;
+	viewCount: number;
 
 	@Column({
-		default: 0,
-	})
-	like_count: number;
-
-	@Column({
-		default: 0,
-	})
-	comment_length: number;
-
-	@Column({
-		default: 0,
-	})
-	view_count: number;
-
-	@Column({
+		name: 'is_temp',
 		nullable: false,
 	})
-	is_temp: boolean;
+	isTemp: boolean;
 
 	@CreateDateColumn({
 		nullable: true,
 		default: null,
+		name: 'created_at',
 	})
-	created_at: Date;
+	createdAt: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
 		default: null,
+		name: 'updated_at',
 	})
-	updated_at: Date;
+	updatedAt: Date;
 }

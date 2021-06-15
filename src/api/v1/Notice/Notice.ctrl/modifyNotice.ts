@@ -31,7 +31,7 @@ export default async (request: Request, response: Response) => {
 		modifyNotice.idx = idx;
 		modifyNotice.title = title || modifyNotice.title;
 		modifyNotice.contents = contents || modifyNotice.contents;
-		modifyNotice.writer = user ? user.name : '관리자';
+		modifyNotice.user = user;
 		modifyNotice.updated_at = new Date();
 
 		await noticeRepository.save(modifyNotice);

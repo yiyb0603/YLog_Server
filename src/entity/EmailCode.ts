@@ -18,6 +18,7 @@ export class EmailCode {
 	@Column({
 		nullable: false,
 		default: false,
+		name: 'isCertified',
 	})
-	is_certified: boolean;
+	isCertified: boolean;
 }

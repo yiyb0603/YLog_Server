@@ -22,63 +22,62 @@ export default async (request: Request, response: Response) => {
 		const posts: Post[] = await postRepository.find({
 			select: [
 				'idx',
-				'category_idx',
+				'category',
 				'introduction',
-				'created_at',
+				'createdAt',
 				'thumbnail',
 				'title',
-				'writer',
-				'writer_idx',
-				'updated_at',
-				'view_count',
-				'is_temp',
-				'like_count',
+				'user',
+				'updatedAt',
+				'viewCount',
+				'isTemp',
+				'likeCount',
 			],
 			
 			order: {
-				created_at: 'DESC',
+				createdAt: 'DESC',
 			},
 		});
 
 		for (let i = 0; i < posts.length; i++) {
 			const commentCount: number = await commentRepository.count({
 				where: {
-					post_idx: posts[i].idx,
+					fk_post_idx: posts[i].idx,
 				},
 			});
 
 			const replyCount: number = await replyRepository.count({
 				where: {
-					post_idx: posts[i].idx,
+					fk_post_idx: posts[i].idx,
 				}
 			});
 
 			commentLength += commentCount + replyCount;
-			posts[i].comment_length = commentLength;
+			posts[i].commentCount = commentLength;
 			commentLength = 0;
 
 			const viewNumber: number = await viewRepository.count({
 				where: {
-					post_idx: posts[i].idx,
+					fk_post_idx: posts[i].idx,
 				}
 			});
 
 			viewCount += viewNumber;
-			posts[i].view_count = viewCount;
+			posts[i].viewCount = viewCount;
 			viewCount = 0;
 
 			const likeNumber: number = await likeRepostory.count({
 				where: {
-					post_idx: posts[i].idx,
+					fk_post_idx: posts[i].idx,
 				}
 			});
 
 			likeCount += likeNumber;
-			posts[i].like_count = likeCount;
+			posts[i].likeCount = likeCount;
 			likeCount = 0;
 
 			viewCount += viewNumber;
-			posts[i].view_count = viewCount;
+			posts[i].viewCount = viewCount;
 			viewCount = 0;
 		}
 

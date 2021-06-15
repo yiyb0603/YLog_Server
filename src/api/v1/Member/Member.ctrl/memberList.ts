@@ -11,7 +11,7 @@ export default async (request: Request, response: Response) => {
 
 		const members: User[] = await userRepository.find({
 			where: {
-				is_allow: isAllow === 'null' ? IsNull() : Boolean(isAllow),
+				isAllow: isAllow === 'null' ? IsNull() : Boolean(isAllow),
 			},
 		});
 

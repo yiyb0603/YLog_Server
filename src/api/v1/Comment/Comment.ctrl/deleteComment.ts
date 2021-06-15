@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
+import { Repository, getRepository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { Repository, getRepository } from 'typeorm';
 import { Comment } from '../../../../entity/Comment';
 import { User } from '../../../../entity/User';
-import { Reply } from '../../../../entity/Reply';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -12,7 +11,6 @@ export default async (request: Request, response: Response) => {
 		const user: User = request.user;
 
 		const commentRepository: Repository<Comment> = getRepository(Comment);
-		const replyRepository: Repository<Reply> = getRepository(Reply);
 
 		if (!Number.isInteger(idx)) {
 			ColorConsole.red(`[ERROR 400] 검증 오류입니다.`);
@@ -26,7 +24,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if ((!user || !user.is_admin) && findComment.writer !== user.name) {
+		if ((!user || !user.isAdmin) && findComment.user.idx !== user.idx) {
 			ColorConsole.red(`[ERROR 403] 댓글을 삭제할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 삭제할 권한이 없습니다.');
 			return;

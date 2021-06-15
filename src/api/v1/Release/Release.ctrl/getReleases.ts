@@ -13,7 +13,7 @@ export default async (request: Request, response: Response) => {
         'title',
         'created_at',
         'updated_at',
-        'writer'
+        'user',
 			],
 		});
 

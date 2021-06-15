@@ -19,34 +19,20 @@ export default async (request: Request, response: Response) => {
 
 		const replies: Reply[] = await replyRepository.find({
 			where: {
-				post_idx: postIdx,
+				fk_post_idx: postIdx,
 			},
 
 			select: [
 				'idx',
-				'post_idx',
+				'post',
 				'contents',
-				'replied_at',
-				'updated_at',
-				'comment_idx',
-				'writer',
-				'writer_idx',
-				'writer_profile',
-				'is_private',
+				'repliedAt',
+				'updatedAt',
+				'comment',
+				'user',
+				'isPrivate',
 			],
 		});
-
-		for (let i = 0; i < replies.length; i++) {
-			const userProfiles: User = await userRepository.findOne({ 
-				where: {
-					idx: replies[i].writer_idx,
-				},
-			});
-
-			if (userProfiles) {
-				replies[i].writer_profile = userProfiles.profile_image;
-			}
-		}
 
 		await replyRepository.save(replies);
 		ColorConsole.green(`[200] 답글 조회에 성공하였습니다.`);

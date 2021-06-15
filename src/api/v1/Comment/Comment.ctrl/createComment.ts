@@ -27,7 +27,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (post.is_temp) {
+		if (post.isTemp) {
 			ColorConsole.red(`[ERROR 401] 임시저장 글에는 댓글 작성이 불가능합니다.`);
 			handleFailed(response, 401, '임시저장 글에는 댓글 작성이 불가능합니다.');
 			return;
@@ -41,25 +41,23 @@ export default async (request: Request, response: Response) => {
 
 		const postWriter: User = await userRepository.findOne({
 			where: {
-				idx: post.writer_idx,
+				idx: post.user.idx,
 			},
 		});
 
 		const comment: Comment = new Comment();
-		comment.post_idx = postIdx;
-		comment.writer_idx = user ? user.idx : null;
-		comment.writer = user ? user.name : null;
-		comment.writer_profile = user ? user.profile_image : null;
+		comment.post = post;
+		comment.user = user;
 		comment.contents = contents;
-		comment.created_at = new Date();
-		comment.updated_at = null;
-		comment.is_private = isPrivate;
+		comment.createdAt = new Date();
+		comment.updatedAt = null;
+		comment.isPrivate = isPrivate;
 
-		if ((!user || postWriter.idx !== user.idx) && postWriter.fcm_allow) {
-			const { fcm_token } = postWriter;
+		if ((!user || postWriter.idx !== user.idx) && postWriter.fcmAllow) {
+			const { fcmToken } = postWriter;
 
 			SendFCM(
-				fcm_token,
+				fcmToken,
 				user
 					? `${user.name}님이 댓글을 작성하였습니다.`
 					: '게스트님이 댓글을 작성하였습니다.',

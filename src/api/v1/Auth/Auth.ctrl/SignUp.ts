@@ -39,7 +39,7 @@ export default async (request: Request, response: Response) => {
 			where: { email },
 		});
 
-		if (!certifiedEmail || !certifiedEmail.is_certified) {
+		if (!certifiedEmail || !certifiedEmail.isCertified) {
 			ColorConsole.red(`[ERROR 401] 인증되지 않은 이메일 입니다.`);
 			handleFailed(response, 401, '인증되지 않은 이메일 입니다.');
 			return;
@@ -48,10 +48,10 @@ export default async (request: Request, response: Response) => {
 		const user: User = new User();
 		user.password = password;
 		user.name = name;
-		user.joined_at = null;
+		user.joinedAt = null;
 		user.email = email;
-		user.profile_image = profileImage || null;
-		user.is_admin = adminCode === ADMIN_CODE || false;
+		user.profileImage = profileImage || null;
+		user.isAdmin = adminCode === ADMIN_CODE || false;
 
 		const admins: User[] = await userRepository.find({
 			where: {
@@ -61,11 +61,11 @@ export default async (request: Request, response: Response) => {
 		});
 
 		for (let i = 0; i < admins.length; i++) {
-			if (admins[i].fcm_allow) {
-				const { fcm_token } = admins[i];
+			if (admins[i].fcmAllow) {
+				const { fcmToken } = admins[i];
 	
 				SendFCM(
-					fcm_token,`${user.name}님이 가입신청을 하였습니다.`
+					fcmToken,`${user.name}님이 가입신청을 하였습니다.`
 				);
 			}
 		}

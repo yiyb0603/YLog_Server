@@ -7,8 +7,9 @@ export class Category {
 
 	@Column({
 		nullable: false,
+		name: 'category_name',
 	})
-	category_name: string;
+	categoryName: string;
 
 	@Column({
 		nullable: false,

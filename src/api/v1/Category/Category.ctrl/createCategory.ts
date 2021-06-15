@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
+import { getRepository, Repository } from 'typeorm';
 import { Category } from '../../../../entity/Category';
-import { getRepository, Like, Repository } from 'typeorm';
 import { ICategoryCreate } from 'interface/CategoryTypes';
 import { validateCreateCategory } from '../../../../lib/validation/Category/createCategory';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
@@ -27,7 +27,7 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const category: Category = new Category();
-		category.category_name = categoryName;
+		category.categoryName = categoryName;
 
 		await categoryRepository.save(category);
 		ColorConsole.green(`[200] 카테고리 생성에 성공하였습니다.`);

@@ -22,7 +22,7 @@ export default async (request: Request, response: Response) => {
     release.title = title;
     release.contents = contents;
     release.created_at = createdAt;
-    release.writer = user.name;
+    release.user = user;
 
     await releaseRepository.save(release);
     ColorConsole.green(`[200] 릴리즈 노트를 작성하였습니다.`);

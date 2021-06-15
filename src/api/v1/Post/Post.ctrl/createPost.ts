@@ -38,16 +38,14 @@ export default async (request: Request, response: Response) => {
 		}
 
 		const post: Post = new Post();
-		post.category_idx = existsCategory.idx;
+		post.category = existsCategory;
 		post.title = title;
 		post.introduction = introduction;
-		post.writer = user ? user.name : '관리자';
-		post.writer_idx = user && user.idx;
+		post.user = user;
 		post.contents = contents;
 		post.thumbnail = thumbnail || null;
-		post.is_temp = isTemp;
-		post.created_at = new Date();
-		post.updated_at = null;
+		post.isTemp = isTemp;
+		post.updatedAt = null;
 
 		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 생성에 성공하였습니다.`);

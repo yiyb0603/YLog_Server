@@ -9,58 +9,54 @@ import {
 } from 'typeorm';
 import { Comment } from './Comment';
 import { Post } from './Post';
+import { User } from './User';
 
 @Entity('reply')
 export class Reply {
 	@PrimaryGeneratedColumn()
 	idx: number;
 
-	@ManyToOne(() => Post, { onDelete: "CASCADE" })
-	@JoinColumn({ name: "post_idx" })
+	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
+	@JoinColumn({ name: 'fk_post_idx' })
 	post: Post;
 
 	@Column()
-	post_idx: number;
+	fk_post_idx: number;
 
-	@ManyToOne(() => Comment, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "comment_idx" })
+	@ManyToOne(() => Comment, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'comment_idx' })
   comment: Comment;
 
 	@Column()
-	comment_idx: number;
+	fk_comment_idx: number;
 
-	@Column({
-		nullable: true,
-		default: null,
+	@ManyToOne(() => User, {
+		onDelete: 'CASCADE',
 	})
-	writer: string;
-
-	@Column({
-		nullable: true,
-		default: null,
+	@JoinColumn({
+		name: 'fk_user_idx',
 	})
-	writer_idx: number;
-
-	@Column({
-		nullable: true,
-		default: null,
-	})
-	writer_profile: string;
+	user: User;
 
 	@Column()
 	contents: string;
 
 	@CreateDateColumn({
 		nullable: true,
+		name: 'replied_at',
 	})
-	replied_at: Date;
+	repliedAt: Date;
 
 	@UpdateDateColumn({
+		name: 'updated_at',
 		nullable: true,
 		default: null,
 	})
-	updated_at: Date;
+	updatedAt: Date;
 
-	@Column()
-	is_private: boolean;
+	@Column({
+		type: 'boolean',
+		name: 'is_private',
+	})
+	isPrivate!: boolean;
 }

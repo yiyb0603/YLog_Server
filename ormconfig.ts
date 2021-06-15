@@ -1,6 +1,7 @@
+import { ConnectionOptions } from 'typeorm';
 import 'dotenv/config';
 
-export default {
+const ormConfig: ConnectionOptions =  {
 	type: 'mysql',
 	host: process.env.DB_HOST,
 	port: 3306,
@@ -19,3 +20,5 @@ export default {
 		subscribersDir: 'src/subscriber',
 	},
 };
+
+export default ormConfig;

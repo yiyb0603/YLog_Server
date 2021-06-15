@@ -24,7 +24,7 @@ export default async (request: Request, response: Response) => {
       return;
     }
 
-    if (like.user_idx !== user.idx) {
+    if (like.user.idx !== user.idx) {
       ColorConsole.red(`[ERROR 403] 권한이 없습니다.`);
       handleFailed(response, 403, '권한이 없습니다.');
       return;

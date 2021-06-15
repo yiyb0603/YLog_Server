@@ -37,10 +37,10 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (findComment.writer_idx) {
+		if (findComment.user.idx) {
 			commentWriter = await userRepository.findOne({
 				where: {
-					idx: findComment.writer_idx,
+					idx: findComment.user.idx,
 				},
 			});
 		}
@@ -51,27 +51,25 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (!findComment.writer_idx && isPrivate) {
+		if (!findComment.user.idx && isPrivate) {
 			ColorConsole.red(`[ERROR 401] 비회원 댓글은 비공개 답글 작성이 불가능합니다.`);
 			handleFailed(response, 401, '비회원 댓글은 비공개 답글 작성이 불가능합니다.');
 			return;
 		}
 
 		const reply: Reply = new Reply();
-		reply.post_idx = postIdx;
+		reply.post = findPost;
 		reply.contents = contents;
-		reply.replied_at = new Date();
-		reply.comment_idx = commentIdx;
-		reply.writer = user ? user.name : null;
-		reply.writer_idx = user ? user.idx : null;
-		reply.writer_profile = user ? user.profile_image : null;
-		reply.is_private = isPrivate;
+		reply.repliedAt = new Date();
+		reply.comment = findComment;
+		reply.user = user;
+		reply.isPrivate = isPrivate;
 
-		if ((user && commentWriter) && (commentWriter.idx !== user.idx) && commentWriter.fcm_allow) {
-			const { fcm_token } = commentWriter;
+		if ((user && commentWriter) && (commentWriter.idx !== user.idx) && commentWriter.fcmAllow) {
+			const { fcmToken } = commentWriter;
 
 			SendFCM(
-				fcm_token,
+				fcmToken,
 				commentWriter
 					? `${commentWriter.name}님이 답글을 남기셨습니다.`
 					: '게스트님이 답글을 남기셨습니다.',

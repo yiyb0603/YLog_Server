@@ -12,12 +12,10 @@ export default async (request: Request, response: Response) => {
 			idx,
 			title,
 			contents,
-			writer,
 			thumbnail,
-			updatedAt,
 			categoryIdx,
 			introduction,
-			isTemp
+			isTemp,
 		} = request.body;
 		const user: User = request.user;
 
@@ -51,12 +49,11 @@ export default async (request: Request, response: Response) => {
 		post.title = title || post.title;
 		post.introduction = introduction || post.introduction;
 		post.contents = contents || post.contents;
-		post.writer = user ? user.name : '관리자';
+		post.user = user;
 		post.thumbnail = thumbnail || post.thumbnail || 'null';
-		post.writer_idx = user ? user.idx : null;
-		post.category_idx = categoryIdx || post.category_idx;
-		post.updated_at = isTemp ? null : new Date();
-		post.is_temp = isTemp;
+		post.category = category;
+		post.updatedAt = isTemp ? null : new Date();
+		post.isTemp = isTemp;
 
 		await postRepository.save(post);
 		ColorConsole.green(`[200] 글 수정에 성공하였습니다.`);

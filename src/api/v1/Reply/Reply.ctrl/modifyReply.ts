@@ -1,12 +1,12 @@
+import { getRepository, Repository } from 'typeorm';
+import { User } from 'entity/User';
 import { Comment } from '../../../../entity/Comment';
 import { Post } from '../../../../entity/Post';
 import { Reply } from '../../../../entity/Reply';
 import { Request, Response } from 'express';
 import { validateModifyReply } from '../../../../lib/validation/Reply/modifyReply';
-import { getRepository, Repository } from 'typeorm';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
-import { User } from 'entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -45,7 +45,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (!user || user.idx !== findReply.writer_idx) {
+		if (!user || user.idx !== findReply.user.idx) {
 			ColorConsole.red(`[ERROR 403] 답글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '답글을 수정할 권한이 없습니다.');
 			return;
@@ -53,11 +53,10 @@ export default async (request: Request, response: Response) => {
 
 		const reply: Reply = new Reply();
 		reply.idx = idx;
-		reply.comment_idx = commentIdx;
+		reply.comment = findComment;
 		reply.contents = contents;
-		reply.post_idx = postIdx;
-		reply.updated_at = new Date();
-		reply.is_private = isPrivate;
+		reply.post = findPost;
+		reply.isPrivate = isPrivate;
 
 		await replyRepository.save(reply);
 		ColorConsole.green(`[200] 답글 수정을 성공하였습니다.`);
