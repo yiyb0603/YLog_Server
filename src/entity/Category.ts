@@ -11,9 +11,5 @@ export class Category {
 	})
 	categoryName: string;
 
-	@Column({
-		nullable: false,
-		default: 0,
-	})
-	post_count: number;
+	postCount: number;
 }

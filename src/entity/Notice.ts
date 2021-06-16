@@ -12,19 +12,19 @@ import { User } from './User';
 @Entity('notice')
 export class Notice {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
 
 	@Column({
 		nullable: false,
 		type: 'text',
 	})
-	title: string;
+	title!: string;
 
 	@Column({
 		nullable: false,
 		type: 'text',
 	})
-	contents: string;
+	contents!: string;
 
 	@ManyToOne(() => User, {
 		onDelete: 'CASCADE',
@@ -32,17 +32,20 @@ export class Notice {
 	@JoinColumn({
 		name: 'fk_user_idx',
 	})
-	user: User;
+	user!: User;
 
 	@Column()
-	fk_user_idx: number;
+	fk_user_idx!: number;
 
-	@CreateDateColumn()
-	created_at: Date;
+	@CreateDateColumn({
+		name: 'created_at',
+	})
+	createdAt!: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
 		default: null,
+		name: 'updated_at',
 	})
-	updated_at: Date;
+	updatedAt: Date;
 }

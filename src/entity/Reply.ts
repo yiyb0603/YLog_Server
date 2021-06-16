@@ -23,8 +23,12 @@ export class Reply {
 	@Column()
 	fk_post_idx: number;
 
-	@ManyToOne(() => Comment, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'comment_idx' })
+	@ManyToOne(() => Comment, {
+		onDelete: 'CASCADE',
+	})
+  @JoinColumn({
+		name: 'fk_comment_idx',
+	})
   comment: Comment;
 
 	@Column()
@@ -37,6 +41,9 @@ export class Reply {
 		name: 'fk_user_idx',
 	})
 	user: User;
+
+	@Column()
+	fk_user_idx: number;
 
 	@Column()
 	contents: string;

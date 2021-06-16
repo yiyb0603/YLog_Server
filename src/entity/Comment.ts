@@ -16,12 +16,15 @@ export class Comment {
 	idx: number;
 
 	@ManyToOne((type) => User, {
-		onDelete: 'SET NULL',
+		onDelete: 'CASCADE',
 	})
 	@JoinColumn({
 		name: 'fk_user_idx',
 	})
 	user: User;
+
+	@Column()
+	fk_user_idx: number;
 
 	@Column()
 	contents: string;
@@ -38,8 +41,12 @@ export class Comment {
 	})
 	updatedAt: Date;
 
-	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
-	@JoinColumn({ name: 'fk_post_idx' })
+	@ManyToOne(() => Post, {
+		onDelete: 'CASCADE',
+	})
+	@JoinColumn({
+		name: 'fk_post_idx',
+	})
 	post: Post;
 
 	@Column()

@@ -1,17 +1,21 @@
-import { Post } from '../../../../entity/Post';
 import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
+import { sha512 } from 'js-sha512';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 import { Comment } from '../../../../entity/Comment';
+import { Post } from '../../../../entity/Post';
 import { View } from '../../../../entity/View';
-import { sha512 } from 'js-sha512';
 import { Reply } from '../../../../entity/Reply';
+import { User } from '../../../../entity/User';
+import { Category } from '../../../../entity/Category';
 
 export default async (request: Request, response: Response) => {
 	try {
-		const idx = Number(request.params.idx);
+		const idx: number = Number(request.params.idx);
 		const postRepository: Repository<Post> = getRepository(Post);
+		const userRepository: Repository<User> = getRepository(User);
+		const categoryRepository: Repository<Category> = getRepository(Category);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 		const viewRepository: Repository<View> = getRepository(View);
 		const replyRepository: Repository<Reply> = getRepository(Reply);
@@ -36,6 +40,18 @@ export default async (request: Request, response: Response) => {
 			return handleFailed(response, 404, '존재하지 않는 글입니다.');
 		}
 
+		post.user = await userRepository.findOne({
+			where: {
+				idx: post.fk_user_idx,
+			},
+		});
+
+		post.category = await categoryRepository.findOne({
+			where: {
+				idx: post.fk_category_idx,
+			},
+		});
+
 		const commentCount: number = await commentRepository.count({
 			where: {
 				fk_post_idx: idx,
@@ -48,15 +64,15 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		commentLength += commentCount + replyCount;
+		commentLength += (commentCount + replyCount);
 		post.commentCount = commentLength;
 		commentLength = 0;
 
 		const userExistView = await viewRepository.findOne({
 			where: {
-				user_ip: encryptionIp,
+				userIp: encryptionIp,
 				fk_post_idx: post.idx,
-			}
+			},
 		});
 
 		if (!userExistView) {

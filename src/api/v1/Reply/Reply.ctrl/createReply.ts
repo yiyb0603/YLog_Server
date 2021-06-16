@@ -37,10 +37,10 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (findComment.user.idx) {
+		if (findComment.fk_user_idx) {
 			commentWriter = await userRepository.findOne({
 				where: {
-					idx: findComment.user.idx,
+					idx: findComment.fk_user_idx,
 				},
 			});
 		}
@@ -51,7 +51,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (!findComment.user.idx && isPrivate) {
+		if (!findComment.fk_user_idx && isPrivate) {
 			ColorConsole.red(`[ERROR 401] 비회원 댓글은 비공개 답글 작성이 불가능합니다.`);
 			handleFailed(response, 401, '비회원 댓글은 비공개 답글 작성이 불가능합니다.');
 			return;

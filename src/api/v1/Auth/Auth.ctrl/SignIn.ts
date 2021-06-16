@@ -29,7 +29,7 @@ export default async (request: Request, response: Response) => {
 			return;
 		}
 
-		if (!userInfo.is_allow) {
+		if (!userInfo.isAllow) {
 			ColorConsole.red(`[ERROR 401] 현재 승인되지 않은 유저입니다.`);
 			handleFailed(response, 401, '현재 승인되지 않은 유저입니다.');
 			return;
@@ -39,8 +39,8 @@ export default async (request: Request, response: Response) => {
 			userInfo.idx,
 			userInfo.name,
 			userInfo.email,
-			userInfo.profile_image,
-			userInfo.is_admin,
+			userInfo.profileImage,
+			userInfo.isAdmin,
 		);
 
 		ColorConsole.green(`[200]	로그인에 성공하였습니다.`);

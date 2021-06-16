@@ -31,7 +31,6 @@ export class User {
 	joinedAt: Date;
 
 	@Column({
-		length: 1000,
 		nullable: true,
 		name: 'profile_image',
 	})

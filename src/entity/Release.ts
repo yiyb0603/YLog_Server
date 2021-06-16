@@ -12,18 +12,18 @@ import { User } from './User';
 @Entity('release')
 export class Release {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
 
 	@Column({
 		nullable: false,
 	})
-	title: string;
+	title!: string;
 
 	@Column({
 		nullable: false,
 		type: 'text',
 	})
-	contents: string;
+	contents!: string;
 
 	@ManyToOne(() => User, {
 		onDelete: 'CASCADE',
@@ -33,12 +33,15 @@ export class Release {
 	})
 	user: User;
 
-	@CreateDateColumn()
-	created_at: Date;
+	@CreateDateColumn({
+		name: 'created_at',
+	})
+	createdAt: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
+		name: 'updated_at',
 		default: null,
 	})
-	updated_at: Date;
+	updatedAt: Date;
 }

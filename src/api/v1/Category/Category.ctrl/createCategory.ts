@@ -17,7 +17,7 @@ export default async (request: Request, response: Response) => {
 
 		const isExistsCategory: Category = await categoryRepository.findOne({
 			where: {
-				category_name: categoryName
+				categoryName,
 			},
 		});
 

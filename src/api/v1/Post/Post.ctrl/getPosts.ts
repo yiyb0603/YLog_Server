@@ -6,6 +6,8 @@ import { Comment } from '../../../../entity/Comment';
 import { View } from '../../../../entity/View';
 import { Reply } from '../../../../entity/Reply';
 import { Like } from '../../../../entity/Like';
+import { Category } from '../../../../entity/Category';
+import { User } from '../../../../entity/User';
 
 export default async (request: Request, response: Response) => {
 	try {
@@ -14,6 +16,8 @@ export default async (request: Request, response: Response) => {
 		const replyRepository: Repository<Reply> = getRepository(Reply);
 		const viewRepository: Repository<View> = getRepository(View);
 		const likeRepostory: Repository<Like> = getRepository(Like);
+		const userRepository: Repository<User> = getRepository(User);
+		const categoryRepository: Repository<Category> = getRepository(Category);
 
 		let commentLength: number = 0;
 		let viewCount: number = 0;
@@ -29,17 +33,29 @@ export default async (request: Request, response: Response) => {
 				'title',
 				'user',
 				'updatedAt',
-				'viewCount',
+				'fk_category_idx',
+				'fk_user_idx',
 				'isTemp',
-				'likeCount',
 			],
-			
+
 			order: {
 				createdAt: 'DESC',
 			},
 		});
 
 		for (let i = 0; i < posts.length; i++) {
+			posts[i].category = await categoryRepository.findOne({
+				where: {
+					idx: posts[i].fk_category_idx,
+				},
+			});
+
+			posts[i].user = await userRepository.findOne({
+				where: {
+					idx: posts[i].fk_user_idx,
+				},
+			});
+
 			const commentCount: number = await commentRepository.count({
 				where: {
 					fk_post_idx: posts[i].idx,
@@ -49,7 +65,7 @@ export default async (request: Request, response: Response) => {
 			const replyCount: number = await replyRepository.count({
 				where: {
 					fk_post_idx: posts[i].idx,
-				}
+				},
 			});
 
 			commentLength += commentCount + replyCount;
@@ -59,7 +75,7 @@ export default async (request: Request, response: Response) => {
 			const viewNumber: number = await viewRepository.count({
 				where: {
 					fk_post_idx: posts[i].idx,
-				}
+				},
 			});
 
 			viewCount += viewNumber;
@@ -69,7 +85,7 @@ export default async (request: Request, response: Response) => {
 			const likeNumber: number = await likeRepostory.count({
 				where: {
 					fk_post_idx: posts[i].idx,
-				}
+				},
 			});
 
 			likeCount += likeNumber;

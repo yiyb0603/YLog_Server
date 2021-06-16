@@ -31,7 +31,7 @@ export default async (request: Request, response: Response) => {
 			},
 		});
 
-		if (!user || findComment.user.idx !== user.idx) {
+		if (!user || findComment.fk_user_idx !== user.idx) {
 			ColorConsole.red(`[ERROR 403] 댓글을 수정할 권한이 없습니다.`);
 			handleFailed(response, 403, '댓글을 수정할 권한이 없습니다.');
 			return;
@@ -47,7 +47,7 @@ export default async (request: Request, response: Response) => {
 		comment.idx = idx;
 		comment.post = findPost;
 		comment.contents = contents || comment.contents;
-		comment.is_private = isPrivate;
+		comment.isPrivate = isPrivate;
 
 		await commentRepository.save(comment);
 		ColorConsole.green(`[200] 댓글 수정을 성공하였습니다.`);

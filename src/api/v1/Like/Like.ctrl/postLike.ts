@@ -23,7 +23,7 @@ export default async (request: Request, response: Response) => {
     const post: Post = await postRepository.findOne({
       where: {
         idx: postIdx,
-      }
+      },
     });
 
     if (!post) {

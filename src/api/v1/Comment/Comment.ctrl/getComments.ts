@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Repository, getRepository } from 'typeorm';
 import { Post } from '../../../../entity/Post';
 import { Comment } from '../../../../entity/Comment';
+import { User } from '../../../../entity/User';
 import ColorConsole from '../../../../lib/ColorConsole';
 import { handleFailed, handleSuccess } from '../../../../lib/Response';
 
@@ -9,6 +10,7 @@ export default async (request: Request, response: Response) => {
 	try {
 		const postIdx: number = Number(request.query.postIdx);
 		const postRepository: Repository<Post> = getRepository(Post);
+		const userRepository: Repository<User> = getRepository(User);
 		const commentRepository: Repository<Comment> = getRepository(Comment);
 
 		if (isNaN(postIdx)) {
@@ -36,6 +38,7 @@ export default async (request: Request, response: Response) => {
 				'createdAt',
 				'post',
 				'user',
+				'fk_user_idx',
 				'updatedAt',
 				'isPrivate',
 			],
@@ -44,6 +47,14 @@ export default async (request: Request, response: Response) => {
 				fk_post_idx: postIdx,
 			},
 		});
+
+		for (const comment of comments) {
+			comment.user = await userRepository.findOne({
+				where: {
+					idx: comment.fk_user_idx,
+				},
+			});
+		}
 
 		ColorConsole.green(`[200] 댓글 목록 조회에 성공하였습니다.`);
 		handleSuccess(response, 200, '댓글 목록 조회에 성공하였습니다.', {

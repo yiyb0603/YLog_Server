@@ -41,7 +41,7 @@ export default async (request: Request, response: Response) => {
 
 		const postWriter: User = await userRepository.findOne({
 			where: {
-				idx: post.user.idx,
+				idx: post.fk_user_idx,
 			},
 		});
 

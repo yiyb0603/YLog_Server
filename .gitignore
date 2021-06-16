@@ -6,3 +6,4 @@ tmp/
 temp/
 config/
 .env
+public/

@@ -1,19 +1,15 @@
-import { User } from '../../entity/User';
-import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '../token';
 import { getRepository, Repository } from 'typeorm';
+import { Request, Response, NextFunction } from 'express';
+import { User } from '../../entity/User';
+import { verifyToken } from '../token';
 import ColorConsole from '../ColorConsole';
 import { handleFailed } from '../Response';
 
-const validateAdmin = async (
-	request: Request,
-	response: Response,
-	next: NextFunction
-) => {
+const validateAdmin = async (request: Request, response: Response, next: NextFunction) => {
 	try {
 		const user: User = await validateAuth(request, response);
 
-		if (!user || !user.is_admin) {
+		if (!user || !user.isAdmin) {
 			ColorConsole.red(`[ERROR 403] 권한이 없습니다.`);
 			handleFailed(response, 403, '권한이 없습니다.');
 			return;

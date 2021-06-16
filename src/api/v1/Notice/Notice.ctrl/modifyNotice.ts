@@ -32,7 +32,7 @@ export default async (request: Request, response: Response) => {
 		modifyNotice.title = title || modifyNotice.title;
 		modifyNotice.contents = contents || modifyNotice.contents;
 		modifyNotice.user = user;
-		modifyNotice.updated_at = new Date();
+		modifyNotice.updatedAt = new Date();
 
 		await noticeRepository.save(modifyNotice);
 		ColorConsole.green(`[200] 공지사항 수정을 성공하였습니다.`);
