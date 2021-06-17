@@ -5,7 +5,7 @@ import { User } from './User';
 @Entity('like')
 export class Like {
   @PrimaryGeneratedColumn()
-  idx: number;
+  idx!: number;
 
   @ManyToOne(() => Post, {
     onDelete: 'CASCADE',
@@ -13,10 +13,10 @@ export class Like {
   @JoinColumn({
     name: 'fk_post_idx',
   })
-  post: Post;
+  post!: Post;
 
   @Column()
-  fk_post_idx: number;
+  fk_post_idx!: number;
 
   @ManyToOne(() => User, {
     onDelete: 'CASCADE',
@@ -24,8 +24,8 @@ export class Like {
   @JoinColumn({
     name: 'fk_user_idx',
   })
-  user: User;
+  user!: User;
 
   @Column()
-  fk_user_idx: number;
+  fk_user_idx!: number;
 }

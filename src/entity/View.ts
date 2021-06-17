@@ -1,7 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from './Post';
 
-@Entity('view')
+@Entity({
+  name: 'view',
+})
 export class View {
   @PrimaryGeneratedColumn()
   idx: number;

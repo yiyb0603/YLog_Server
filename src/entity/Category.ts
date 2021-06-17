@@ -1,15 +1,17 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
-@Entity('category')
+@Entity({
+	name: 'category',
+})
 export class Category {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
 
 	@Column({
 		nullable: false,
 		name: 'category_name',
 	})
-	categoryName: string;
+	categoryName!: string;
 
 	postCount: number;
 }

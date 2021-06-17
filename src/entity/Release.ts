@@ -9,13 +9,16 @@ import {
 } from 'typeorm';
 import { User } from './User';
 
-@Entity('release')
+@Entity({
+	name: 'release',
+})
 export class Release {
 	@PrimaryGeneratedColumn()
 	idx!: number;
 
 	@Column({
 		nullable: false,
+		length: 100,
 	})
 	title!: string;
 
@@ -31,15 +34,17 @@ export class Release {
 	@JoinColumn({
 		name: 'fk_user_idx',
 	})
-	user: User;
+	user!: User;
 
 	@CreateDateColumn({
+		type: 'timestamp',
 		name: 'created_at',
 	})
-	createdAt: Date;
+	createdAt!: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
+		type: 'timestamp',
 		name: 'updated_at',
 		default: null,
 	})

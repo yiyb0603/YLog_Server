@@ -16,7 +16,7 @@ export class Notice {
 
 	@Column({
 		nullable: false,
-		type: 'text',
+		length: 100,
 	})
 	title!: string;
 
@@ -39,6 +39,7 @@ export class Notice {
 
 	@CreateDateColumn({
 		name: 'created_at',
+		type: 'timestamp',
 	})
 	createdAt!: Date;
 
@@ -46,6 +47,7 @@ export class Notice {
 		nullable: true,
 		default: null,
 		name: 'updated_at',
+		type: 'timestamp',
 	})
 	updatedAt: Date;
 }

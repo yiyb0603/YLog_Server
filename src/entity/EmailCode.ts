@@ -1,24 +1,30 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('email_code')
+@Entity({
+	name: 'email_code',
+})
 export class EmailCode {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
+
+	@Index({
+		unique: true,
+	})
+	@Column({
+		nullable: false,
+	})
+	email!: string;
 
 	@Column({
 		nullable: false,
 	})
-	email: string;
-
-	@Column({
-		nullable: false,
-	})
-	code: string;
+	code!: string;
 
 	@Column({
 		nullable: false,
 		default: false,
+		type: 'boolean',
 		name: 'isCertified',
 	})
-	isCertified: boolean;
+	isCertified!: boolean;
 }

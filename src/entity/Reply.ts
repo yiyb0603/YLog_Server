@@ -11,17 +11,19 @@ import { Comment } from './Comment';
 import { Post } from './Post';
 import { User } from './User';
 
-@Entity('reply')
+@Entity({
+	name: 'reply',
+})
 export class Reply {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
 
 	@ManyToOne(() => Post, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'fk_post_idx' })
-	post: Post;
+	post!: Post;
 
 	@Column()
-	fk_post_idx: number;
+	fk_post_idx!: number;
 
 	@ManyToOne(() => Comment, {
 		onDelete: 'CASCADE',
@@ -29,10 +31,10 @@ export class Reply {
   @JoinColumn({
 		name: 'fk_comment_idx',
 	})
-  comment: Comment;
+  comment!: Comment;
 
 	@Column()
-	fk_comment_idx: number;
+	fk_comment_idx!: number;
 
 	@ManyToOne(() => User, {
 		onDelete: 'CASCADE',
@@ -46,16 +48,18 @@ export class Reply {
 	fk_user_idx: number;
 
 	@Column()
-	contents: string;
+	contents!: string;
 
 	@CreateDateColumn({
 		nullable: true,
 		name: 'replied_at',
+		type: 'timestamp',
 	})
 	repliedAt: Date;
 
 	@UpdateDateColumn({
 		name: 'updated_at',
+		type: 'timestamp',
 		nullable: true,
 		default: null,
 	})

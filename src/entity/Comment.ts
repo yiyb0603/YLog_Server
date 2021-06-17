@@ -10,10 +10,12 @@ import {
 import { Post } from './Post';
 import { User } from './User';
 
-@Entity('comment')
+@Entity({
+	name: 'comment',
+})
 export class Comment {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
 
 	@ManyToOne((type) => User, {
 		onDelete: 'CASCADE',
@@ -27,17 +29,19 @@ export class Comment {
 	fk_user_idx: number;
 
 	@Column()
-	contents: string;
+	contents!: string;
 
 	@CreateDateColumn({
 		name: 'created_at',
+		type: 'timestamp',
 	})
-	createdAt: Date;
+	createdAt!: Date;
 
 	@UpdateDateColumn({
 		nullable: true,
 		default: null,
 		name: 'updated_at',
+		type: 'timestamp',
 	})
 	updatedAt: Date;
 
@@ -47,14 +51,15 @@ export class Comment {
 	@JoinColumn({
 		name: 'fk_post_idx',
 	})
-	post: Post;
+	post!: Post;
 
 	@Column()
 	fk_post_idx: number;
 
 	@Column({
 		nullable: false,
+		type: 'boolean',
 		name: 'is_private',
 	})
-	isPrivate: boolean;
+	isPrivate!: boolean;
 }

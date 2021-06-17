@@ -10,37 +10,39 @@ import {
 import { Category } from './Category';
 import { User } from './User';
 
-@Entity('post')
+@Entity({
+	name: 'post',
+})
 export class Post {
 	@PrimaryGeneratedColumn()
-	idx: number;
+	idx!: number;
+
+	@Column({
+		nullable: false,
+		length: 100,
+	})
+	title!: string;
+
+	@Column({
+		nullable: false,
+		length: 150,
+	})
+	introduction!: string;
 
 	@Column({
 		nullable: false,
 		type: 'text',
 	})
-	title: string;
-
-	@Column({
-		nullable: false,
-		type: 'text',
-	})
-	introduction: string;
-
-	@Column({
-		nullable: false,
-		type: 'text',
-	})
-	contents: string;
+	contents!: string;
 
 	@ManyToOne(() => User)
 	@JoinColumn({
 		name: 'fk_user_idx',
 	})
-	user: User;
+	user!: User;
 
 	@Column()
-	fk_user_idx: number;
+	fk_user_idx!: number;
 
 	@Column({
 		nullable: true,
@@ -49,10 +51,10 @@ export class Post {
 
 	@ManyToOne(() => Category, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'fk_category_idx' })
-	category: Category;
+	category!: Category;
 
 	@Column()
-	fk_category_idx: number;
+	fk_category_idx!: number;
 
 	likeCount: number;
 	commentCount: number;
@@ -60,14 +62,16 @@ export class Post {
 
 	@Column({
 		name: 'is_temp',
+		type: 'boolean',
 		nullable: false,
 	})
-	isTemp: boolean;
+	isTemp!: boolean;
 
 	@CreateDateColumn({
 		nullable: true,
 		default: null,
 		name: 'created_at',
+		type: 'timestamp',
 	})
 	createdAt: Date;
 
@@ -75,6 +79,7 @@ export class Post {
 		nullable: true,
 		default: null,
 		name: 'updated_at',
+		type: 'timestamp',
 	})
 	updatedAt: Date;
 }

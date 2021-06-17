@@ -1,6 +1,8 @@
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user')
+@Entity({
+	name: 'user',
+})
 export class User {
 	@PrimaryGeneratedColumn()
 	idx!: number;
@@ -22,10 +24,10 @@ export class User {
 	})
 	email!: string;
 
-	@Column('timestamptz')
 	@CreateDateColumn({
 		nullable: true,
 		default: null,
+		type: 'timestamp',
 		name: 'joined_at',
 	})
 	joinedAt: Date;
